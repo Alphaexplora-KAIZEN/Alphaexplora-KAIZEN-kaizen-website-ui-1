@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { fadeUp, staggerContainer } from '../../../shared/utils/constants';
+import Section from '../../../shared/components/Section';
 import MaterialIcon from '../../../shared/components/MaterialIcon';
 import type { CleaningServicesData } from '../../../shared/models/types';
 
@@ -17,7 +18,7 @@ export default function TargetSpaces({ data }: TargetSpacesProps) {
   const [activeId, setActiveId] = useState<string | null>(null);
 
   return (
-    <section className="bg-navy-deep min-h-[85vh] flex flex-col">
+    <Section seam className="bg-navy-deep min-h-[85vh] flex flex-col">
       <motion.div
         ref={sectionRef1}
         initial="hidden"
@@ -89,6 +90,6 @@ export default function TargetSpaces({ data }: TargetSpacesProps) {
           );
         })}
       </motion.div>
-    </section>
+    </Section>
   );
 }

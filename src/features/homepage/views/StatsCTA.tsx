@@ -1,7 +1,9 @@
 import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { fadeUp, staggerContainer } from '../../../shared/utils/constants';
+import Section from '../../../shared/components/Section';
 import CountUp from '../../../shared/components/CountUp';
+import KaizenMark from '../../../shared/components/KaizenMark';
 import MaterialIcon from '../../../shared/components/MaterialIcon';
 import type { HomepageData } from '../../../shared/models/types';
 
@@ -13,16 +15,23 @@ interface StatsCTAProps {
  * A full-bleed "ledger ribbon" — hairline gold rules top and bottom, mono
  * numerals for the stats — rather than a rounded floating card with glow
  * blobs. Stats and the closing CTA sit side by side as entries in the same
- * row, divided by hairlines, echoing the brand's ledger motif.
+ * row, divided by hairlines, echoing the brand's ledger motif. The ambient
+ * blobs drift slowly rather than sitting static, and a large, faint Kaizen
+ * mark turns quietly in the background — the same mark that appears small
+ * and sharp in the hero now reappears big and soft here, like a seal
+ * closing out the page.
  */
 export default function StatsCTA({ data }: StatsCTAProps) {
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true, amount: 0.2, margin: '-80px' });
 
   return (
-    <section className="relative py-16 md:py-20 bg-navy-deep bg-grain border-y border-gold/20 overflow-hidden">
-      <div className="pointer-events-none absolute -top-24 -left-16 h-64 w-64 rounded-full bg-gold/10 blur-3xl" />
-      <div className="pointer-events-none absolute -bottom-24 -right-16 h-64 w-64 rounded-full bg-teal/10 blur-3xl" />
+    <Section seam className="relative py-16 md:py-20 bg-navy-deep bg-grain border-y border-gold/20 overflow-hidden">
+      <div className="pointer-events-none absolute -top-24 -left-16 h-64 w-64 rounded-full bg-gold/10 blur-3xl animate-float" />
+      <div className="pointer-events-none absolute -bottom-24 -right-16 h-64 w-64 rounded-full bg-teal/10 blur-3xl animate-float-delay" />
+      <div className="pointer-events-none absolute -right-16 top-1/2 hidden -translate-y-1/2 text-gold/[0.06] lg:block">
+        <KaizenMark size={240} />
+      </div>
 
       <div className="max-w-container-max-width mx-auto px-6 relative">
         <motion.div
@@ -37,6 +46,8 @@ export default function StatsCTA({ data }: StatsCTAProps) {
               <motion.div
                 key={stat.id}
                 variants={fadeUp}
+                whileHover={{ y: -3 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 22 }}
                 className={`text-left ${index > 0 ? 'md:pl-10 md:ml-10 md:border-l md:border-gold/20' : ''}`}
               >
                 <p className="font-mono tabular-nums text-headline-md text-[30px] font-semibold text-gold">
@@ -69,6 +80,6 @@ export default function StatsCTA({ data }: StatsCTAProps) {
           </motion.div>
         </motion.div>
       </div>
-    </section>
+    </Section>
   );
 }

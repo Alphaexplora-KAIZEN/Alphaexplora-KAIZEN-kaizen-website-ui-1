@@ -140,6 +140,63 @@ h1, h2, h3, h4 {
   }
 }
 
+/* ---------------------------------------------------------------------- */
+/* Section rhythm — clean boundaries + smooth hand-off between sections    */
+/* ---------------------------------------------------------------------- */
+
+/* A thin, edge-faded hairline marking where a new section begins. Faded
+   at both ends (rather than a flat full-width rule) so it reads as a
+   quiet seam, not a hard ruler line. */
+.section-divider {
+  position: relative;
+}
+.section-divider::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(217, 167, 91, 0.22) 20%, rgba(217, 167, 91, 0.22) 80%, transparent);
+}
+
+/* For sections with their own distinct background tone (dark bands, tinted
+   panels). A soft vignette at the top and bottom edge — rather than a flat
+   color cut — so the eye reads entering/leaving the section as a gradual
+   dissolve instead of a hard jump, no matter what sits on either side. */
+.section-seam {
+  position: relative;
+}
+.section-seam::before,
+.section-seam::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: clamp(48px, 8vw, 96px);
+  pointer-events: none;
+  z-index: 1;
+}
+.section-seam::before {
+  top: 0;
+  background: linear-gradient(to bottom, rgba(2, 6, 12, 0.32), transparent);
+}
+.section-seam::after {
+  bottom: 0;
+  background: linear-gradient(to top, rgba(2, 6, 12, 0.32), transparent);
+}
+
+/* Hides the scrollbar on an intentionally horizontally-scrollable strip
+   (e.g. the "What We Do" quick-nav on narrow screens) while keeping the
+   element scrollable by touch/drag. */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 /* Custom scrollbar in the brand's ink/brass tones */
 ::-webkit-scrollbar {
   width: 10px;

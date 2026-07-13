@@ -75,7 +75,7 @@ export default function Navbar({ brand, links }: NavbarProps) {
           onClick={() => setBookingOpen(true)}
           className="hidden md:inline-flex bg-primary-container text-on-primary font-label-bold text-label-bold px-6 py-3 rounded-full transition-all duration-200 shadow-glow hover:shadow-glow-hover hover:bg-navy-deep hover:text-gold hover:scale-[1.02] active:scale-95 focus-ring"
         >
-          Book a Service
+          Contact Us
         </button>
 
         <button
@@ -126,7 +126,7 @@ export default function Navbar({ brand, links }: NavbarProps) {
                 }}
                 className="mt-1 rounded-xl bg-primary-container px-4 py-3 text-center text-label-bold font-label-bold text-on-primary transition-transform active:scale-95"
               >
-                Book a Service
+                Contact Us
               </button>
             </div>
           </motion.div>

@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 import { fadeUp } from '../../../shared/utils/constants';
+import Section from '../../../shared/components/Section';
 import MaterialIcon from '../../../shared/components/MaterialIcon';
 import type { AirconCareData } from '../../../shared/models/types';
 
@@ -18,7 +19,7 @@ export default function Benefits({ data }: BenefitsProps) {
   const activeBenefit = data.benefits.find((b) => b.id === activeId) ?? data.benefits[0];
 
   return (
-    <section className="bg-navy-deep py-section-gap-mobile md:py-section-gap-desktop">
+    <Section seam className="bg-navy-deep py-section-gap-mobile md:py-section-gap-desktop">
       <div className="max-w-container-max-width mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-grid-gutter items-center">
         <motion.div
           ref={sectionRef1}
@@ -142,7 +143,7 @@ export default function Benefits({ data }: BenefitsProps) {
           </div>
         </motion.div>
       </div>
-    </section>
+    </Section>
   );
 }
 

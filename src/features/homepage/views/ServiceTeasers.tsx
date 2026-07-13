@@ -1,37 +1,66 @@
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, useInView } from 'framer-motion';
-import { fadeUp, staggerContainer } from '../../../shared/utils/constants';
+import { fadeUp } from '../../../shared/utils/constants';
 import MaterialIcon from '../../../shared/components/MaterialIcon';
+import Section from '../../../shared/components/Section';
 import type { HomepageData } from '../../../shared/models/types';
 
 interface ServiceTeasersProps {
   data: HomepageData;
 }
 
+// How long a panel holds the spotlight before the next one takes over,
+// while the visitor hasn't chosen one themselves.
+const AUTO_ADVANCE_MS = 4500;
+
+const EASE = [0.22, 1, 0.36, 1] as [number, number, number, number];
+
 /**
- * Three specialties are a real, enumerable list — not an arbitrary set of
- * cards — so this reads as a "ledger" of entries: a mono index, a thumbnail,
- * and a hairline rule between rows, rather than three equal boxes in a grid.
+ * "What We Do" as three panels sharing one frame, laid shoulder to
+ * shoulder like folders in a drawer. One is always open — its photo,
+ * description, and link in full view — while the other two rest as
+ * slim spines showing just a number, an icon, and a name. Hover or tap
+ * a spine and it swaps places with the open panel; on mobile the same
+ * interaction runs top-to-bottom instead of side-to-side.
+ *
+ * This replaces the earlier tab-and-stage layout. Where that version
+ * kept the photo in a fixed frame and swapped its contents, this one
+ * makes the three specialties visibly compete for the same shared
+ * space — a more physical, "which one do you want to open" feel that
+ * suits three services fighting for one homepage slot.
  */
 export default function ServiceTeasers({ data }: ServiceTeasersProps) {
-  const sectionRef1 = useRef(null);
-  const isInView1 = useInView(sectionRef1, { once: true, amount: 0.2, margin: '-80px' });
-  const sectionRef2 = useRef(null);
-  const isInView2 = useInView(sectionRef2, { once: true, amount: 0.2, margin: '-80px' });
+  const sectionRef = useRef(null);
+  const isInView = useInView(sectionRef, { once: true, amount: 0.2, margin: '-80px' });
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+
+  const services = data.services;
+
+  useEffect(() => {
+    if (!isInView || isPaused) return undefined;
+    const id = setTimeout(() => {
+      setActiveIndex((i) => (i + 1) % services.length);
+    }, AUTO_ADVANCE_MS);
+    return () => clearTimeout(id);
+  }, [isInView, isPaused, activeIndex, services.length]);
 
   return (
-    <section className="py-section-gap-mobile md:py-section-gap-desktop bg-surface-container-low">
+    <Section seam className="py-section-gap-mobile md:py-section-gap-desktop bg-surface-container-low overflow-hidden">
       <div className="max-w-container-max-width mx-auto px-6">
         <motion.div
-          ref={sectionRef1}
+          ref={sectionRef}
           initial="hidden"
-          animate={isInView1 ? 'visible' : 'hidden'}
+          animate={isInView ? 'visible' : 'hidden'}
           variants={fadeUp}
           className="max-w-2xl mb-12"
         >
           <span className="inline-flex items-center gap-2 font-label-bold text-label-bold text-gold uppercase tracking-wider mb-3">
-            <span className="h-1.5 w-1.5 rounded-full bg-gold" />
+            <span className="relative flex h-1.5 w-1.5">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-gold opacity-75" />
+              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-gold" />
+            </span>
             What we do
           </span>
           <h2 className="font-headline-md text-headline-md text-on-background mb-4">{data.servicesHeading}</h2>
@@ -39,50 +68,117 @@ export default function ServiceTeasers({ data }: ServiceTeasersProps) {
         </motion.div>
 
         <motion.div
-          ref={sectionRef2}
           initial="hidden"
-          animate={isInView2 ? 'visible' : 'hidden'}
-          variants={staggerContainer}
-          className="border-t border-gold/20"
+          animate={isInView ? 'visible' : 'hidden'}
+          variants={fadeUp}
+          custom={0.15}
+          onMouseLeave={() => setIsPaused(false)}
+          className="flex flex-col lg:flex-row gap-3 h-[720px] sm:h-[620px] lg:h-[500px] rounded-3xl overflow-hidden border border-gold/20 bg-surface p-3"
         >
-          {data.services.map((service, index) => (
-            <motion.div key={service.id} variants={fadeUp}>
-              <Link
-                to={service.href}
-                className="group flex flex-col sm:flex-row sm:items-center gap-5 sm:gap-8 py-7 px-2 -mx-2 rounded-2xl border-b border-gold/20 hover:bg-surface/60 transition-colors duration-300 focus-ring"
+          {services.map((service, index) => {
+            const isActive = index === activeIndex;
+            return (
+              <motion.div
+                key={service.id}
+                layout
+                transition={{ layout: { duration: 0.7, ease: EASE } }}
+                style={{ flexGrow: isActive ? 5 : 1, flexBasis: 0 }}
+                className="relative min-h-0 min-w-0 rounded-2xl overflow-hidden"
               >
-                <span className="font-mono text-gold/60 text-sm w-8 shrink-0">0{index + 1}</span>
-
-                <div className="relative w-full sm:w-32 h-24 sm:h-20 rounded-xl overflow-hidden shrink-0">
+                <div
+                  role="button"
+                  tabIndex={0}
+                  aria-expanded={isActive}
+                  aria-label={`Show ${service.title}`}
+                  onMouseEnter={() => {
+                    setIsPaused(true);
+                    setActiveIndex(index);
+                  }}
+                  onFocus={() => {
+                    setIsPaused(true);
+                    setActiveIndex(index);
+                  }}
+                  onClick={() => {
+                    setIsPaused(true);
+                    setActiveIndex(index);
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      setIsPaused(true);
+                      setActiveIndex(index);
+                    }
+                  }}
+                  className="group absolute inset-0 h-full w-full cursor-pointer focus-ring"
+                >
                   <img
                     src={service.image.src}
                     alt={service.image.alt}
-                    loading="lazy"
-                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-110"
+                    className={`absolute inset-0 h-full w-full object-cover transition-transform duration-[1400ms] ease-out ${
+                      isActive ? 'scale-100' : 'scale-110'
+                    }`}
                   />
-                </div>
-
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-teal-soft text-teal">
-                  <MaterialIcon name={service.icon} className="text-[22px]" />
-                </span>
-
-                <div className="flex-1 min-w-0">
-                  <h3 className="font-headline-sm text-headline-sm text-on-surface mb-1">{service.title}</h3>
-                  <p className="font-body-md text-body-md text-on-surface-variant">{service.description}</p>
-                </div>
-
-                <span className="hidden sm:inline-flex items-center gap-2 font-label-bold text-label-bold text-gold shrink-0">
-                  Learn more
-                  <MaterialIcon
-                    name="arrow_forward"
-                    className="text-base transition-transform duration-300 group-hover:translate-x-1"
+                  <div
+                    className={`absolute inset-0 bg-gradient-to-t transition-opacity duration-700 ${
+                      isActive
+                        ? 'from-navy-deep via-navy-deep/50 to-navy-deep/10 opacity-100'
+                        : 'from-navy-deep/95 via-navy-deep/70 to-navy-deep/40 opacity-100'
+                    }`}
                   />
-                </span>
-              </Link>
-            </motion.div>
-          ))}
+
+                  {/* Number + icon — always visible, top of every panel */}
+                  <div className="absolute top-5 left-5 right-5 flex items-center justify-between">
+                    <span className="font-mono text-xs text-gold/80 tracking-wider">0{index + 1}</span>
+                    <span
+                      className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition-colors duration-500 ${
+                        isActive ? 'bg-teal-soft text-teal' : 'bg-white/10 text-white/70'
+                      }`}
+                    >
+                      <MaterialIcon name={service.icon} className="text-[18px]" />
+                    </span>
+                  </div>
+
+                  {/* Collapsed label — vertical spine on desktop, horizontal on mobile */}
+                  <span
+                    className={`hidden lg:block absolute bottom-6 left-1/2 -translate-x-1/2 [writing-mode:vertical-rl] rotate-180 font-headline-sm text-base text-on-primary whitespace-nowrap transition-opacity duration-300 ${
+                      isActive ? 'opacity-0 pointer-events-none' : 'opacity-100 delay-200'
+                    }`}
+                  >
+                    {service.title}
+                  </span>
+                  <span
+                    className={`lg:hidden absolute bottom-5 left-5 right-5 font-headline-sm text-lg text-on-primary transition-opacity duration-300 ${
+                      isActive ? 'opacity-0 pointer-events-none' : 'opacity-100 delay-200'
+                    }`}
+                  >
+                    {service.title}
+                  </span>
+
+                  {/* Expanded content — photo caption, description, link */}
+                  <div
+                    className={`absolute inset-x-0 bottom-0 p-6 sm:p-8 transition-all duration-500 ${
+                      isActive ? 'opacity-100 translate-y-0 delay-200' : 'opacity-0 translate-y-3 pointer-events-none'
+                    }`}
+                  >
+                    <h3 className="font-headline-md text-headline-md text-on-primary mb-3">{service.title}</h3>
+                    <p className="font-body-md text-body-md text-on-primary/85 max-w-md mb-6">{service.description}</p>
+                    <Link
+                      to={service.href}
+                      className="relative z-10 group/link inline-flex items-center gap-2 font-label-bold text-label-bold text-gold hover:text-primary-fixed transition-colors focus-ring rounded-full"
+                    >
+                      Learn more
+                      <MaterialIcon
+                        name="arrow_forward"
+                        className="text-base transition-transform duration-300 group-hover/link:translate-x-1"
+                      />
+                    </Link>
+                  </div>
+                </div>
+              </motion.div>
+            );
+          })}
         </motion.div>
       </div>
-    </section>
+    </Section>
   );
 }

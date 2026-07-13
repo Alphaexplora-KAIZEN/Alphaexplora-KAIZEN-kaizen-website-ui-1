@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { fadeUp, staggerContainer } from '../../../shared/utils/constants';
+import Section from '../../../shared/components/Section';
 import CountUp from '../../../shared/components/CountUp';
 
 const STATS = [
@@ -14,7 +15,7 @@ export default function TrustCTA() {
   const isInView = useInView(sectionRef, { once: true, amount: 0.2, margin: '-80px' });
 
   return (
-    <section className="py-section-gap-mobile md:py-section-gap-desktop">
+    <Section className="py-section-gap-mobile md:py-section-gap-desktop">
       <div className="max-w-container-max-width mx-auto px-6">
         <motion.div
           ref={sectionRef}
@@ -64,6 +65,6 @@ export default function TrustCTA() {
           </div>
         </motion.div>
       </div>
-    </section>
+    </Section>
   );
 }

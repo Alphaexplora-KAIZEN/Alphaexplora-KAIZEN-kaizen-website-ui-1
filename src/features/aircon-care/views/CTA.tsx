@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { fadeUp } from '../../../shared/utils/constants';
+import Section from '../../../shared/components/Section';
 import type { AirconCareData } from '../../../shared/models/types';
 
 interface CTAProps {
@@ -12,7 +13,7 @@ export default function CTA({ data }: CTAProps) {
   const isInView1 = useInView(sectionRef1, { once: true, amount: 0.2, margin: '-80px' });
 
   return (
-    <section className="relative py-24 overflow-hidden">
+    <Section seam className="relative py-24 overflow-hidden">
       <div className="absolute inset-0 z-0">
         <img
           src={data.ctaImage.src}
@@ -39,6 +40,6 @@ export default function CTA({ data }: CTAProps) {
           </a>
         </div>
       </motion.div>
-    </section>
+    </Section>
   );
 }

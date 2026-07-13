@@ -137,6 +137,10 @@ export default {
           from: { backgroundPosition: '0 0' },
           to: { backgroundPosition: '64px 64px' },
         },
+        ticker: {
+          from: { transform: 'translateX(0)' },
+          to: { transform: 'translateX(-50%)' },
+        },
       },
       animation: {
         float: 'float 7s ease-in-out infinite',
@@ -146,6 +150,7 @@ export default {
         shimmer: 'shimmer 2.4s linear infinite',
         'fade-in': 'fade-in 0.6s ease-out both',
         'grid-pan': 'grid-pan 12s linear infinite',
+        ticker: 'ticker 28s linear infinite',
       },
     },
   },

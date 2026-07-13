@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
-import { fadeUp, staggerContainer } from '../../../shared/utils/constants';
+import { fadeUp } from '../../../shared/utils/constants';
+import Section from '../../../shared/components/Section';
 import MaterialIcon from '../../../shared/components/MaterialIcon';
 import type { PropertyManagementData } from '../../../shared/models/types';
 
@@ -8,41 +9,19 @@ interface ProcessStepsProps {
   data: PropertyManagementData;
 }
 
-const STEP_THEMES = [
-  {
-    badgeBg: 'bg-teal',
-    badgeText: 'text-on-primary',
-    numberBg: 'bg-teal',
-    topBar: 'bg-teal',
-    ring: 'ring-teal',
-    soft: 'bg-teal-soft',
-    text: 'text-teal',
-  },
-  {
-    badgeBg: 'bg-blue',
-    badgeText: 'text-on-primary',
-    numberBg: 'bg-blue',
-    topBar: 'bg-blue',
-    ring: 'ring-blue',
-    soft: 'bg-blue/10',
-    text: 'text-blue',
-  },
-  {
-    badgeBg: 'bg-primary-container',
-    badgeText: 'text-on-primary',
-    numberBg: 'bg-primary-container',
-    topBar: 'bg-primary-container',
-    ring: 'ring-primary-container',
-    soft: 'bg-primary-container/10',
-    text: 'text-primary',
-  },
-];
+const STEP_ACCENT = ['text-teal', 'text-blue', 'text-gold'];
 
+/**
+ * The step-by-step tracker at top stays — it's a hairline rail with dots,
+ * not a card. What changes is what used to sit below it: three identical
+ * photo cards became a running list of numbered rows, each pairing its own
+ * small photo with the step's copy. The self-advancing "visited" state still
+ * drives which entry is marked complete, but that now shows as a filled
+ * number and a gold rule instead of a ring around a card.
+ */
 export default function ProcessSteps({ data }: ProcessStepsProps) {
   const sectionRef1 = useRef(null);
   const isInView1 = useInView(sectionRef1, { once: true, amount: 0.2, margin: '-80px' });
-  const sectionRef2 = useRef(null);
-  const isInView2 = useInView(sectionRef2, { once: true, amount: 0.2, margin: '-80px' });
 
   const [visited, setVisited] = useState<Set<string>>(new Set());
 
@@ -82,36 +61,22 @@ export default function ProcessSteps({ data }: ProcessStepsProps) {
   }, [isInView1]);
 
   return (
-    <section
-      id="process"
-      className="py-section-gap-mobile md:py-section-gap-desktop bg-gradient-to-b from-teal-soft via-secondary-container/50 to-secondary-container/30"
-    >
+    <Section id="process" divider className="py-section-gap-mobile md:py-section-gap-desktop">
       <div className="max-w-container-max-width mx-auto px-6">
         <motion.div
           ref={sectionRef1}
           initial="hidden"
           animate={isInView1 ? 'visible' : 'hidden'}
           variants={fadeUp}
-          className="text-center max-w-2xl mx-auto mb-4 space-y-4"
+          className="max-w-2xl mb-4 space-y-4"
         >
           <h2 className="font-headline-md text-headline-md text-primary">{data.processHeading}</h2>
           <p className="font-body-md text-body-md text-on-surface-variant">{data.processSubheading}</p>
         </motion.div>
 
-        <motion.p
-          initial="hidden"
-          animate={isInView1 ? 'visible' : 'hidden'}
-          variants={fadeUp}
-          className="text-center font-label-bold text-label-bold text-primary/70 mb-10 flex items-center justify-center gap-2"
-        >
-          <MaterialIcon name="auto_awesome" className="text-lg" />
-          Watch how the process comes together, step by step
-        </motion.p>
-
         {/* Progress tracker */}
-        <div className="flex items-center justify-center mb-12 max-w-xl mx-auto">
+        <div className="flex items-center mb-14 max-w-xl">
           {data.steps.map((step, index) => {
-            const theme = STEP_THEMES[index % STEP_THEMES.length];
             const isVisited = visited.has(step.id);
             const isLast = index === data.steps.length - 1;
             return (
@@ -119,8 +84,8 @@ export default function ProcessSteps({ data }: ProcessStepsProps) {
                 <motion.div
                   animate={{ scale: isVisited ? 1.1 : 1 }}
                   transition={{ type: 'spring', stiffness: 300, damping: 15 }}
-                  className={`relative w-11 h-11 rounded-full flex items-center justify-center font-headline-sm text-sm font-bold shadow-card flex-shrink-0 transition-colors duration-300 ${
-                    isVisited ? theme.numberBg + ' text-on-primary' : 'bg-surface border-2 border-outline-variant text-on-surface-variant'
+                  className={`relative w-10 h-10 rounded-full flex items-center justify-center font-headline-sm text-sm font-bold flex-shrink-0 transition-colors duration-300 ${
+                    isVisited ? 'bg-gold text-navy-deep' : 'border-2 border-outline-variant text-on-surface-variant'
                   }`}
                 >
                   <AnimatePresence mode="wait" initial={false}>
@@ -142,12 +107,12 @@ export default function ProcessSteps({ data }: ProcessStepsProps) {
                   </AnimatePresence>
                 </motion.div>
                 {!isLast && (
-                  <div className="flex-1 h-1 mx-2 rounded-full bg-surface-container-high overflow-hidden">
+                  <div className="flex-1 h-px mx-2 bg-outline-variant overflow-hidden">
                     <motion.div
                       initial={{ width: '0%' }}
                       animate={{ width: isVisited ? '100%' : '0%' }}
                       transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                      className={`h-full ${theme.numberBg}`}
+                      className="h-full bg-gold"
                     />
                   </div>
                 )}
@@ -156,69 +121,60 @@ export default function ProcessSteps({ data }: ProcessStepsProps) {
           })}
         </div>
 
-        <motion.div
-          ref={sectionRef2}
-          initial="hidden"
-          animate={isInView2 ? 'visible' : 'hidden'}
-          variants={staggerContainer}
-          className="grid grid-cols-1 md:grid-cols-3 gap-grid-gutter"
-        >
+        <div className="border-t border-outline-variant">
           {data.steps.map((step, index) => {
-            const theme = STEP_THEMES[index % STEP_THEMES.length];
+            const accent = STEP_ACCENT[index % STEP_ACCENT.length];
             const isVisited = visited.has(step.id);
             return (
-              <motion.div
-                key={step.id}
-                variants={fadeUp}
-                whileHover={{ y: -6 }}
-                className={`bg-surface rounded-3xl shadow-card hover:shadow-card-hover transition-all duration-300 relative overflow-hidden group ${
-                  isVisited ? `ring-2 ${theme.ring}` : ''
-                }`}
-              >
-                <div className={`absolute top-0 left-0 right-0 h-1.5 ${theme.topBar} z-10`} />
-                <div className="relative h-44 overflow-hidden">
-                  <img
-                    src={step.image.src}
-                    alt={step.image.alt}
-                    loading="lazy"
-                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-110"
-                  />
-                  {isVisited && (
-                    <motion.div
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      className={`absolute inset-0 ${theme.soft} mix-blend-multiply`}
-                    />
-                  )}
-                  <span
-                    className={`absolute top-4 right-4 w-9 h-9 rounded-full ${theme.numberBg} text-on-primary font-headline-sm text-sm font-bold flex items-center justify-center shadow-card`}
-                  >
-                    {isVisited ? <MaterialIcon name="check" filled className="text-lg" /> : step.step}
-                  </span>
-                  <div
-                    className={`absolute bottom-3 left-6 w-14 h-14 ${theme.badgeBg} rounded-2xl flex items-center justify-center ${theme.badgeText} shadow-card`}
-                  >
-                    <MaterialIcon name={step.icon} filled className="text-2xl" />
-                  </div>
-                </div>
-                <div className="p-card-padding pt-6">
-                  <h3 className="font-headline-sm text-headline-sm text-primary mb-4 flex items-center gap-2">
-                    {step.step}. {step.title}
-                  </h3>
-                  <ul className="space-y-3 font-body-md text-body-md text-on-surface-variant list-none relative z-10">
-                    {step.features.map((feature) => (
-                      <li key={feature} className="flex items-start gap-3">
-                        <MaterialIcon name="check_circle" filled className={`${theme.text} text-xl mt-0.5`} />
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </motion.div>
+              <StepRow key={step.id} step={step} accent={accent} isVisited={isVisited} />
             );
           })}
-        </motion.div>
+        </div>
       </div>
-    </section>
+    </Section>
+  );
+}
+
+function StepRow({
+  step,
+  accent,
+  isVisited,
+}: {
+  step: PropertyManagementData['steps'][number];
+  accent: string;
+  isVisited: boolean;
+}) {
+  const rowRef = useRef(null);
+  const isInView = useInView(rowRef, { once: true, amount: 0.2, margin: '-80px' });
+
+  return (
+    <motion.div
+      ref={rowRef}
+      initial="hidden"
+      animate={isInView ? 'visible' : 'hidden'}
+      variants={fadeUp}
+      className={`border-b border-outline-variant py-8 grid grid-cols-1 sm:grid-cols-[auto_120px_1fr] gap-x-6 gap-y-4 items-center transition-colors duration-500 ${isVisited ? 'bg-gold/5' : ''}`}
+    >
+      <span className={`font-mono text-2xl ${accent}`}>{String(step.step).padStart(2, '0')}</span>
+
+      <div className="relative h-20 w-full sm:w-[120px] overflow-hidden rounded-md order-3 sm:order-2">
+        <img src={step.image.src} alt={step.image.alt} loading="lazy" className="absolute inset-0 w-full h-full object-cover" />
+      </div>
+
+      <div className="order-2 sm:order-3">
+        <h3 className="font-headline-sm text-headline-sm text-primary mb-2 flex items-center gap-2">
+          <MaterialIcon name={step.icon} filled className={`text-xl ${accent}`} />
+          {step.title}
+        </h3>
+        <ul className="flex flex-wrap gap-x-6 gap-y-2">
+          {step.features.map((feature) => (
+            <li key={feature} className="flex items-center gap-2 font-body-md text-body-md text-on-surface-variant">
+              <MaterialIcon name="check_circle" filled className={`text-[16px] ${accent}`} />
+              {feature}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </motion.div>
   );
 }

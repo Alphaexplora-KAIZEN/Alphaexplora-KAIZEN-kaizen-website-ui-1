@@ -8,10 +8,10 @@ import Contact from './Contact';
 
 /**
  * About Us used to also pull in the Property Management "Why Choose Us"
- * panel and the Cleaning Services "Core Values" flip-card section. Both
- * repeated the same "family-owned, we care for it like our own" message and
- * the same trust stats that already appear in Story below, so this page
- * ended up telling the same story three times. Now it's just: hero, story +
+ * panel, the Cleaning Services "Core Values" flip-card section, and the
+ * "Spaces We Care For" showcase. All three repeated content that already
+ * lives elsewhere (trust stats in Story below, the spaces showcase now on
+ * What We Do, next to the services it illustrates). Now it's: hero, story +
  * milestones, a calm values summary, and contact.
  */
 export default function AboutUs() {

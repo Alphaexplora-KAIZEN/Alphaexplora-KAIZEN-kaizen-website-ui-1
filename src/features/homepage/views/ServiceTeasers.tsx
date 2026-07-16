@@ -48,13 +48,13 @@ export default function ServiceTeasers({ data }: ServiceTeasersProps) {
 
   return (
     <Section seam className="py-section-gap-mobile md:py-section-gap-desktop bg-surface-container-low overflow-hidden">
-      <div className="max-w-container-max-width mx-auto px-6">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6">
         <motion.div
           ref={sectionRef}
           initial="hidden"
           animate={isInView ? 'visible' : 'hidden'}
           variants={fadeUp}
-          className="max-w-2xl mb-12"
+          className="max-w-2xl mb-8"
         >
           <span className="inline-flex items-center gap-2 font-label-bold text-label-bold text-gold uppercase tracking-wider mb-3">
             <span className="relative flex h-1.5 w-1.5">
@@ -73,7 +73,7 @@ export default function ServiceTeasers({ data }: ServiceTeasersProps) {
           variants={fadeUp}
           custom={0.15}
           onMouseLeave={() => setIsPaused(false)}
-          className="flex flex-col lg:flex-row gap-3 h-[720px] sm:h-[620px] lg:h-[500px] rounded-3xl overflow-hidden border border-gold/20 bg-surface p-3"
+          className="flex flex-col lg:flex-row gap-2 h-[820px] sm:h-[720px] lg:h-[640px] rounded-3xl overflow-hidden border border-gold/20 bg-surface p-1.5"
         >
           {services.map((service, index) => {
             const isActive = index === activeIndex;
@@ -82,7 +82,7 @@ export default function ServiceTeasers({ data }: ServiceTeasersProps) {
                 key={service.id}
                 layout
                 transition={{ layout: { duration: 0.7, ease: EASE } }}
-                style={{ flexGrow: isActive ? 5 : 1, flexBasis: 0 }}
+                style={{ flexGrow: isActive ? 8 : 1, flexBasis: 0 }}
                 className="relative min-h-0 min-w-0 rounded-2xl overflow-hidden"
               >
                 <div

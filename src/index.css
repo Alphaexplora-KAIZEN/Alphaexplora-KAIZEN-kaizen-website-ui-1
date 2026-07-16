@@ -7,6 +7,21 @@
 
 html {
   scroll-behavior: smooth;
+  /* Only elements that opt in with `scroll-snap-align` (the What We Do
+     "Kaizen Specialty" sections, plus its own landing/intro section) are
+     affected by this — everything else on the site scrolls exactly as
+     before. `proximity` snaps to those sections when you land near one,
+     but — unlike `mandatory` — never fights a scroll gesture that's
+     headed past the last snap point. The three "Kaizen Specialty" cards
+     are followed by non-snapping content (Spaces We Care For, the trust
+     CTA, the footer), so `mandatory` had nowhere to send you after the
+     final card (Aircon Care) and just snapped back to it, trapping the
+     scroll there. */
+  scroll-snap-type: y proximity;
+  /* Fallback for --wwd-sticky-offset (see useStickyOffset) before it's
+     measured on mount — matches the fixed navbar + QuickNav's typical
+     combined height so there's no visible jump once the real value lands. */
+  --wwd-sticky-offset: 9rem;
 }
 
 body {

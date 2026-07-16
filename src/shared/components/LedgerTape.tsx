@@ -13,7 +13,18 @@ interface LedgerTapeProps {
  * the row is duplicated once so the CSS animation loops seamlessly.
  */
 export default function LedgerTape({ items, className = '' }: LedgerTapeProps) {
-  const loop = [...items, ...items];
+  // The ticker animation always runs the same 28s/50%-translate cycle
+  // regardless of content width, so a short items array (e.g. after
+  // trimming a stat) barely travels any distance and can read as
+  // "stuck." Repeating the base list up to a minimum count keeps the row
+  // wide enough that the same animation is always clearly visible,
+  // however few items are passed in.
+  const MIN_BASE_ITEMS = 10;
+  const base =
+    items.length > 0
+      ? Array.from({ length: Math.ceil(MIN_BASE_ITEMS / items.length) }, () => items).flat()
+      : items;
+  const loop = [...base, ...base];
 
   return (
     <div

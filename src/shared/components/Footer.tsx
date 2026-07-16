@@ -46,6 +46,7 @@ export default function Footer({ chrome }: FooterProps) {
   return (
     <footer className="relative w-full bg-navy-deep bg-grain py-8 md:py-10 overflow-hidden">
       <div className="pointer-events-none absolute -top-24 -right-24 h-64 w-64 rounded-full bg-gold/10 blur-3xl" />
+      <div className="pointer-events-none absolute -bottom-20 -left-16 h-56 w-56 rounded-full bg-teal/10 blur-3xl" />
       <div className="relative max-w-container-max-width mx-auto px-6">
         <div className="grid grid-cols-1 md:grid-cols-[1.3fr_1fr_1fr_1fr] gap-x-grid-gutter gap-y-6 pb-6 md:pb-8 border-b border-on-primary/15">
           <div className="space-y-3">

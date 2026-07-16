@@ -29,63 +29,68 @@ export default function Navbar({ brand, links }: NavbarProps) {
 
   return (
     <nav
+      data-site-navbar
       className={`fixed top-0 w-full z-50 backdrop-blur-md transition-all duration-300 ${
         scrolled ? 'bg-surface/95 shadow-[0_1px_0_rgba(217,167,91,0.12)]' : 'bg-surface/70'
       }`}
     >
       <div
-        className={`flex justify-between items-center max-w-container-max-width mx-auto px-6 transition-all duration-300 ${
+        className={`grid grid-cols-[auto_1fr_auto] items-center w-full transition-all duration-300 ${
           scrolled ? 'h-16' : 'h-20'
         }`}
       >
-        <Link to="/" className="group flex items-center gap-2.5 focus-ring rounded-lg">
+        <Link to="/" className="group flex items-center gap-3.5 focus-ring rounded-lg pl-4 sm:pl-6">
           <img
-            src="/assets/logo.png"
+            src="/assets/logo_with_name_gold_white_variant_1.png"
             alt={brand.shortName}
-            className="h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-[1.04]"
+            className="h-16 w-auto object-contain transition-transform duration-300 group-hover:scale-[1.04]"
           />
         </Link>
 
-        <div className="hidden md:flex gap-8 items-center">
-          {links.map((link) => {
-            const active = isActive(link.href);
-            return (
-              <Link
-                key={link.id}
-                to={link.href}
-                className={`relative font-label-bold text-label-bold pb-1 transition-colors duration-200 ${
-                  active ? 'text-gold' : 'text-on-surface-variant hover:text-gold'
-                }`}
-              >
-                {link.label}
-                {active && (
-                  <motion.span
-                    layoutId="nav-active-underline"
-                    className="absolute left-0 right-0 -bottom-0.5 h-[2px] rounded-full bg-gold"
-                    transition={{ type: 'spring', stiffness: 380, damping: 32 }}
-                  />
-                )}
-              </Link>
-            );
-          })}
+        <div />
+
+        <div className="flex items-center justify-self-end gap-10 lg:gap-14">
+          <div className="hidden md:flex gap-10 lg:gap-14 items-center">
+            {links.map((link) => {
+              const active = isActive(link.href);
+              return (
+                <Link
+                  key={link.id}
+                  to={link.href}
+                  className={`relative font-label-bold font-bold text-base md:text-lg pb-1 transition-colors duration-200 ${
+                    active ? 'text-gold' : 'text-on-surface-variant hover:text-gold'
+                  }`}
+                >
+                  {link.label}
+                  {active && (
+                    <motion.span
+                      layoutId="nav-active-underline"
+                      className="absolute left-0 right-0 -bottom-0.5 h-[2px] rounded-full bg-gold"
+                      transition={{ type: 'spring', stiffness: 380, damping: 32 }}
+                    />
+                  )}
+                </Link>
+              );
+            })}
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setBookingOpen(true)}
+            className="hidden md:inline-flex bg-primary-container text-on-primary font-label-bold text-label-bold px-6 py-3 rounded-full transition-all duration-200 hover:bg-navy-deep hover:text-gold hover:scale-[1.02] active:scale-95 focus-ring mr-4 sm:mr-6"
+          >
+            Contact Us
+          </button>
+
+          <button
+            aria-label={open ? 'Close menu' : 'Open menu'}
+            aria-expanded={open}
+            onClick={() => setOpen((v) => !v)}
+            className="md:hidden flex h-10 w-10 items-center justify-center rounded-full text-gold focus-ring mr-4 sm:mr-6"
+          >
+            <MaterialIcon name={open ? 'close' : 'menu'} />
+          </button>
         </div>
-
-        <button
-          type="button"
-          onClick={() => setBookingOpen(true)}
-          className="hidden md:inline-flex bg-primary-container text-on-primary font-label-bold text-label-bold px-6 py-3 rounded-full transition-all duration-200 shadow-glow hover:shadow-glow-hover hover:bg-navy-deep hover:text-gold hover:scale-[1.02] active:scale-95 focus-ring"
-        >
-          Contact Us
-        </button>
-
-        <button
-          aria-label={open ? 'Close menu' : 'Open menu'}
-          aria-expanded={open}
-          onClick={() => setOpen((v) => !v)}
-          className="md:hidden flex h-10 w-10 items-center justify-center rounded-full text-gold focus-ring"
-        >
-          <MaterialIcon name={open ? 'close' : 'menu'} />
-        </button>
       </div>
 
       <AnimatePresence>

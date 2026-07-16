@@ -48,7 +48,7 @@ function delay<T>(value: T, ms = 300): Promise<T> {
 const SITE_CHROME: SiteChrome = {
   brand: { name: 'Kaizen Optima Solutions', shortName: 'Kaizen Optima' },
   navLinks: [
-    { id: 'homepage', label: 'Homepage', href: '/' },
+    { id: 'homepage', label: 'Home', href: '/' },
     { id: 'what-we-do', label: 'What We Do', href: '/what-we-do' },
     { id: 'about-us', label: 'About Us', href: '/about-us' },
   ],
@@ -74,7 +74,7 @@ const SITE_CHROME: SiteChrome = {
       id: 'contact',
       title: 'Contact',
       links: [
-        { id: 'f-pm-phone', label: '0919 677 8350 (Property Mgmt)', href: 'tel:+639196778350' },
+        { id: 'f-pm-phone', label: '0919 677 8350 (Property Management)', href: 'tel:+639196778350' },
         { id: 'f-cs-phone', label: '0912 087 5598 (Cleaning)', href: 'tel:+639120875598' },
         { id: 'f-email', label: 'kaizenoptimasolutions@gmail.com', href: 'mailto:kaizenoptimasolutions@gmail.com' },
         {
@@ -371,9 +371,9 @@ export async function fetchAirconCareData(): Promise<AirconCareData> {
 
 const HOMEPAGE_DATA: HomepageData = {
   eyebrow: 'We Market. We Manage. We Maintain.',
-  headline: 'One Team for Your Property, Your Space, and Your Air.',
+  headline: 'Peace of Mind Through Comprehensive Care.',
   subheadline:
-    'Kaizen Optima Solutions brings property management, professional cleaning, and aircon care together under one trusted, family-run roof \\u2014 so you get consistent quality without juggling multiple vendors.',
+    'Kaizen Optima Solutions brings property management, professional cleaning, and aircon care together under one trusted, family-run roof, so you get comprehensive care and consistent quality without juggling multiple vendors.',
   primaryCta: 'See What We Do',
   primaryHref: '/what-we-do',
   secondaryCta: 'About Us',
@@ -412,7 +412,7 @@ const HOMEPAGE_DATA: HomepageData = {
   ],
   trustStats: [
     { id: 'retention', value: '98%', label: 'Tenant Retention Rate' },
-    { id: 'support', value: '24/7', label: 'Dedicated Local Support' },
+    { id: 'families', value: '200+', label: 'Properties & Homes Served' },
   ],
   ctaHeadline: 'Ready to experience the Kaizen standard?',
   ctaSubheading: 'Whichever service you need, our team is one call away.',
@@ -441,7 +441,7 @@ const ABOUT_US_DATA: AboutUsData = {
   },
   storyHeading: 'Why Choose Kaizen',
   storyParagraphs: [
-    'As a family-owned business, we don\\u2019t just manage properties, clean homes, or service aircon units \\u2014 we care for every space as if it were our own.',
+    "As a family-owned business, we don't just manage properties, clean homes, or service aircon units; we care for every space as if it were our own.",
     'We combine corporate-level precision with the warmth and personal touch of a boutique hospitality service, guided by our T.I.M.E. values: Trust, Integrity, Mastery, and Efficiency.',
   ],
   storyImage: {
@@ -451,7 +451,7 @@ const ABOUT_US_DATA: AboutUsData = {
   milestones: [
     { id: 'retention', value: '98%', label: 'Tenant Retention Rate' },
     { id: 'support', value: '24/7', label: 'Dedicated Local Support' },
-    { id: 'values', value: 'T.I.M.E.', label: 'Trust \\u00b7 Integrity \\u00b7 Mastery \\u00b7 Efficiency' },
+    { id: 'values', value: 'T.I.M.E.', label: 'Trust · Integrity · Mastery · Efficiency' },
   ],
 };
 

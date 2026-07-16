@@ -22,11 +22,24 @@ export default function Homepage() {
             ...pageData.trustStats.map((s) => `${s.value} ${s.label}`),
           ];
 
+          // A second tape, below the closing "Ready to experience the
+          // Kaizen standard?" CTA — the same ledger-tape treatment,
+          // reassembled from the service names, trust stats, and the
+          // "We Market" half of the eyebrow, so the page closes on the
+          // same running promise it opened with.
+          const closingTapeItems = [
+            'Cleaning Services',
+            'Aircon Care',
+            '98% Tenant Retention Rate',
+            'We Market',
+          ];
+
           return (
             <>
               <Hero data={pageData} />
               <LedgerTape items={tapeItems} />
               <StatsCTA data={pageData} />
+              <LedgerTape items={closingTapeItems} />
               <ServiceTeasers data={pageData} />
             </>
           );

@@ -1,6 +1,8 @@
+import { useState } from 'react';
 import pmProcessMarketImg from '../../../assets/property-management/process-market.jpg';
 import PageLayout from '../../../shared/components/PageLayout';
 import AsyncState from '../../../shared/components/AsyncState';
+import BookingModal from '../../../shared/components/BookingModal';
 import { useWhatWeDoViewModel } from '../viewModels/useWhatWeDoViewModel';
 import PageIntro from './PageIntro';
 import QuickNav from './QuickNav';
@@ -24,6 +26,7 @@ import TrustCTA from './TrustCTA';
  */
 export default function WhatWeDo() {
   const { data, isLoading, error } = useWhatWeDoViewModel();
+  const [bookingOpen, setBookingOpen] = useState(false);
 
   return (
     <PageLayout>
@@ -36,16 +39,14 @@ export default function WhatWeDo() {
             <ServiceSummaryCard
               id="property-management"
               index={1}
-              count={3}
-              icon="apartment"
               title="Property Management"
-              description="From sourcing qualified tenants to full-cycle leasing and repairs, we manage your property with complete accountability — start to finish."
+              description="From sourcing qualified tenants to full-cycle leasing and repairs, we manage your property from start to finish with complete accountability."
               image={{
                 src: pmProcessMarketImg,
                 alt: 'Bright, well-styled kitchen photographed for a property listing',
               }}
               ctaLabel="Get a Free Appraisal"
-              ctaHref={pageData.propertyManagement.bookingHref}
+              onCtaClick={() => setBookingOpen(true)}
               theme={{ accent: 'text-teal', bar: 'bg-teal' }}
               highlights={[
                 { id: 'source', icon: 'photo_camera', label: 'Market & Source qualified tenants' },
@@ -57,13 +58,11 @@ export default function WhatWeDo() {
             <ServiceSummaryCard
               id="cleaning-services"
               index={2}
-              count={3}
-              icon="cleaning_services"
               title="Cleaning Services"
-              description="On T.I.M.E. condo, home, office, and deep-cleaning services for modern living — reliable, thorough, and on your schedule."
+              description="On T.I.M.E. condo, home, office, and deep-cleaning services for modern living that are reliable, thorough, and on your schedule."
               image={pageData.cleaningServices.heroImage}
               ctaLabel="Book a Cleaning"
-              ctaHref={pageData.cleaningServices.bookingHref}
+              onCtaClick={() => setBookingOpen(true)}
               reverse
               theme={{ accent: 'text-blue', bar: 'bg-blue' }}
               highlights={[
@@ -76,13 +75,11 @@ export default function WhatWeDo() {
             <ServiceSummaryCard
               id="aircon-care"
               index={3}
-              count={3}
-              icon="air"
               title="Aircon Care"
               description="Breathe clean, live better. Professional aircon maintenance that improves air quality, boosts efficiency, and extends your unit's lifespan."
               image={pageData.airconCare.heroImage}
               ctaLabel="Book an Inspection"
-              ctaHref={pageData.airconCare.bookingHref}
+              onCtaClick={() => setBookingOpen(true)}
               theme={{ accent: 'text-gold', bar: 'bg-gold' }}
               highlights={[
                 { id: 'general', icon: 'air', label: 'General Cleaning for optimal airflow' },
@@ -94,6 +91,8 @@ export default function WhatWeDo() {
             <TargetSpaces data={pageData.cleaningServices} />
 
             <TrustCTA />
+
+            <BookingModal open={bookingOpen} onClose={() => setBookingOpen(false)} />
           </>
         )}
       </AsyncState>

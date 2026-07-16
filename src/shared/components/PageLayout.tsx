@@ -1,7 +1,6 @@
 import type { ReactNode } from 'react';
 import Navbar from './Navbar';
 import Footer from './Footer';
-import AmbientGlow from './AmbientGlow';
 import { LoadingState, ErrorState } from './LoadingState';
 import { useSiteChromeViewModel } from '../hooks/useSiteChromeViewModel';
 
@@ -17,7 +16,6 @@ export default function PageLayout({ children }: PageLayoutProps) {
 
   return (
     <div className="relative min-h-screen bg-background">
-      <AmbientGlow />
       <div className="relative z-[1]">
         <Navbar brand={data.brand} links={data.navLinks} />
         <main className="pt-20">{children}</main>

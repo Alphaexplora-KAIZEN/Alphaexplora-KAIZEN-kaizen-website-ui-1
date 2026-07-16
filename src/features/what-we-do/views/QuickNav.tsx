@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import MaterialIcon from '../../../shared/components/MaterialIcon';
+import { useStickyOffset } from '../hooks/useStickyOffset';
 
 const JUMP_LINKS = [
   { id: 'property-management', href: '#property-management', label: 'Property Management', icon: 'apartment' },
@@ -18,6 +19,8 @@ const JUMP_LINKS = [
  */
 export default function QuickNav() {
   const [activeId, setActiveId] = useState<string>(JUMP_LINKS[0].id);
+  const navRef = useRef<HTMLElement | null>(null);
+  useStickyOffset(navRef);
 
   useEffect(() => {
     const sections = JUMP_LINKS
@@ -44,6 +47,7 @@ export default function QuickNav() {
 
   return (
     <nav
+      ref={navRef}
       aria-label="Jump to a service"
       className="sticky top-16 z-30 bg-surface/90 backdrop-blur-md border-b border-outline-variant shadow-soft"
     >

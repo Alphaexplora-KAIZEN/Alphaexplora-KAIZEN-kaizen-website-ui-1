@@ -13,7 +13,7 @@ const SERVICE_OPTIONS = [
   'Property Management',
   'Cleaning Services',
   'Aircon Care',
-  'Something else',
+  'Inquiry',
 ];
 
 const inputClasses =
@@ -21,7 +21,8 @@ const inputClasses =
 
 export default function BookingModal({ open, onClose }: BookingModalProps) {
   const [submitted, setSubmitted] = useState(false);
-  const [name, setName] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [service, setService] = useState(SERVICE_OPTIONS[0]);
@@ -41,7 +42,8 @@ export default function BookingModal({ open, onClose }: BookingModalProps) {
   useEffect(() => {
     if (open) {
       setSubmitted(false);
-      setName('');
+      setFirstName('');
+      setLastName('');
       setEmail('');
       setPhone('');
       setService(SERVICE_OPTIONS[0]);
@@ -105,7 +107,7 @@ export default function BookingModal({ open, onClose }: BookingModalProps) {
                 </motion.div>
                 <h3 className="mt-5 font-headline-sm text-headline-sm text-on-surface">Request received</h3>
                 <p className="mt-2 font-body-md text-body-md text-on-surface-variant max-w-xs">
-                  Thanks{name ? `, ${name.split(' ')[0]}` : ''}! Our team will reach out shortly to confirm your{' '}
+                  Thanks{firstName ? `, ${firstName}` : ''}! Our team will reach out shortly to confirm your{' '}
                   {service.toLowerCase()} booking.
                 </p>
                 <button
@@ -126,19 +128,35 @@ export default function BookingModal({ open, onClose }: BookingModalProps) {
                 </p>
 
                 <div className="mt-6 space-y-4">
-                  <div>
-                    <label htmlFor="booking-name" className="mb-1.5 block font-label-bold text-label-bold text-on-surface uppercase tracking-wider">
-                      Full Name
-                    </label>
-                    <input
-                      id="booking-name"
-                      type="text"
-                      required
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      placeholder="Juan Dela Cruz"
-                      className={inputClasses}
-                    />
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label htmlFor="booking-first-name" className="mb-1.5 block font-label-bold text-label-bold text-on-surface uppercase tracking-wider">
+                        First Name
+                      </label>
+                      <input
+                        id="booking-first-name"
+                        type="text"
+                        required
+                        value={firstName}
+                        onChange={(e) => setFirstName(e.target.value)}
+                        placeholder="Juan"
+                        className={inputClasses}
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="booking-last-name" className="mb-1.5 block font-label-bold text-label-bold text-on-surface uppercase tracking-wider">
+                        Last Name
+                      </label>
+                      <input
+                        id="booking-last-name"
+                        type="text"
+                        required
+                        value={lastName}
+                        onChange={(e) => setLastName(e.target.value)}
+                        placeholder="Dela Cruz"
+                        className={inputClasses}
+                      />
+                    </div>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

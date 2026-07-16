@@ -9,7 +9,7 @@ const SERVICES = [
     id: 'property-management',
     icon: 'apartment',
     label: 'Property Management',
-    description: 'Market, lease, and maintain — full-cycle accountability.',
+    description: 'Market, lease, and maintain with full-cycle accountability.',
     accent: 'text-teal',
     ring: 'group-hover:border-teal/50',
   },
@@ -46,7 +46,7 @@ export default function PageIntro() {
   const isInView = useInView(sectionRef, { once: true, amount: 0.3 });
 
   return (
-    <Section className="relative overflow-hidden bg-kaizen-grid flex flex-col justify-center min-h-[calc(100dvh-5rem)] pt-24 pb-10 md:pt-16 md:pb-12">
+    <Section className="snap-start scroll-mt-[var(--wwd-sticky-offset)] relative overflow-hidden bg-kaizen-grid flex flex-col justify-center min-h-[calc(100dvh-5rem)] pt-24 pb-10 md:pt-16 md:pb-12">
       <div className="absolute inset-0 bg-kaizen-mesh pointer-events-none" />
 
       <div className="max-w-container-max-width mx-auto px-6 relative">
@@ -55,52 +55,46 @@ export default function PageIntro() {
           initial="hidden"
           animate={isInView ? 'visible' : 'hidden'}
           variants={staggerContainer}
+          className="flex flex-col items-center text-center"
         >
-          <motion.span
-            variants={fadeUp}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-gold/30 bg-gold/10 text-gold font-label-bold text-label-bold mb-4"
-          >
-            <span className="h-1.5 w-1.5 rounded-full bg-gold" />
-            What We Do
-          </motion.span>
-
           <motion.h1
             variants={fadeUp}
-            className="font-display-lg text-[32px] sm:text-[42px] md:text-[48px] font-bold leading-[1.08] tracking-tight text-on-background mb-4 max-w-3xl"
+            className="font-display-lg text-[clamp(18px,4.4vw,56px)] font-bold leading-[1.05] tracking-tight text-on-background mb-6 whitespace-nowrap"
           >
-            One Team for Your Property, Your Space, and Your Air.
+            We Market. We Manage. We Maintain.
           </motion.h1>
 
           <motion.p
             variants={fadeUp}
-            className="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mb-8 md:mb-10"
+            className="font-body-lg text-xl text-on-surface-variant max-w-3xl mb-10 md:mb-12 text-center"
           >
-            We Market. We Manage. We Maintain. Three specialties, one standard of care — pick a service below to
-            see how it works.
+            One team behind your property, your space, and your air, with property management, cleaning, and
+            aircon care all held to the same standard of accountability. Pick a service below to see how it
+            works.
           </motion.p>
 
-          <motion.div variants={fadeUp} className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4">
+          <motion.div variants={fadeUp} className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-5 w-full text-left">
             {SERVICES.map((service, index) => (
               <a
                 key={service.id}
                 href={`#${service.id}`}
-                className={`group relative flex items-start gap-4 rounded-2xl border border-outline-variant bg-surface/60 backdrop-blur-sm p-5 transition-all duration-300 hover:-translate-y-0.5 hover:bg-surface focus-ring ${service.ring}`}
+                className={`group relative flex items-start gap-5 rounded-2xl border border-outline-variant bg-surface/60 backdrop-blur-sm p-6 transition-all duration-300 hover:-translate-y-0.5 hover:bg-surface focus-ring ${service.ring}`}
               >
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-surface-container-low">
-                  <MaterialIcon name={service.icon} filled className={`text-xl ${service.accent}`} />
+                <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-surface-container-low">
+                  <MaterialIcon name={service.icon} filled className={`text-2xl ${service.accent}`} />
                 </span>
                 <span className="min-w-0">
-                  <span className="flex items-center gap-2 mb-1">
-                    <span className="font-mono text-[11px] text-on-surface-variant/70">0{index + 1}</span>
-                    <span className="font-label-bold text-label-bold text-on-background">{service.label}</span>
+                  <span className="flex items-center gap-2 mb-1.5">
+                    <span className="font-mono text-xs text-on-surface-variant/70">0{index + 1}</span>
+                    <span className="font-label-bold text-lg text-on-background">{service.label}</span>
                   </span>
-                  <span className="block font-body-md text-sm text-on-surface-variant leading-snug">
+                  <span className="block font-body-md text-base text-on-surface-variant leading-snug">
                     {service.description}
                   </span>
                 </span>
                 <MaterialIcon
                   name="arrow_downward"
-                  className="absolute top-5 right-5 text-base text-on-surface-variant/50 transition-transform duration-300 group-hover:translate-y-1"
+                  className="absolute top-6 right-6 text-lg text-on-surface-variant/50 transition-transform duration-300 group-hover:translate-y-1"
                 />
               </a>
             ))}

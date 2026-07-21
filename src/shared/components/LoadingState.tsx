@@ -8,7 +8,7 @@ interface LoadingStateProps {
 export function LoadingState({ fullScreen = false }: LoadingStateProps) {
   return (
     <div
-      className={`flex items-center justify-center text-gold ${
+      className={`flex items-center justify-center text-teal ${
         fullScreen ? 'min-h-screen bg-background' : 'min-h-[60vh]'
       }`}
     >

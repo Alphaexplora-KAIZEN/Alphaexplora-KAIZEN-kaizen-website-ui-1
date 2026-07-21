@@ -176,7 +176,7 @@ export default function ClockField({ pointerRef, count = 48 }: ClockFieldProps) 
           ref={(el) => {
             iconRefs.current[index] = el;
           }}
-          className="absolute text-gold-deep will-change-transform"
+          className="absolute text-teal-deep will-change-transform"
           style={{
             left: `${seed.leftPct}%`,
             top: `${seed.topPct}%`,

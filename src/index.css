@@ -7,17 +7,6 @@
 
 html {
   scroll-behavior: smooth;
-  /* Only elements that opt in with `scroll-snap-align` (the What We Do
-     "Kaizen Specialty" sections, plus its own landing/intro section) are
-     affected by this — everything else on the site scrolls exactly as
-     before. `proximity` snaps to those sections when you land near one,
-     but — unlike `mandatory` — never fights a scroll gesture that's
-     headed past the last snap point. The three "Kaizen Specialty" cards
-     are followed by non-snapping content (Spaces We Care For, the trust
-     CTA, the footer), so `mandatory` had nowhere to send you after the
-     final card (Aircon Care) and just snapped back to it, trapping the
-     scroll there. */
-  scroll-snap-type: y proximity;
   /* Fallback for --wwd-sticky-offset (see useStickyOffset) before it's
      measured on mount — matches the fixed navbar + QuickNav's typical
      combined height so there's no visible jump once the real value lands. */
@@ -61,7 +50,7 @@ h1, h2, h3, h4 {
 }
 
 .focus-ring {
-  @apply outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+  @apply outline-none focus-visible:ring-2 focus-visible:ring-blue focus-visible:ring-offset-2 focus-visible:ring-offset-background;
 }
 
 /* ---------------------------------------------------------------------- */
@@ -69,8 +58,8 @@ h1, h2, h3, h4 {
 /* ---------------------------------------------------------------------- */
 
 ::selection {
-  background: #D9A75B;
-  color: #0A1420;
+  background: #3E7BFF;
+  color: #FFFFFF;
 }
 
 /* Fine ink grain — a quiet, tactile layer over dark sections. Purely
@@ -91,8 +80,19 @@ h1, h2, h3, h4 {
 /* Soft brass/teal mesh used behind hero + CTA sections */
 .bg-kaizen-mesh {
   background-image:
-    radial-gradient(560px circle at 12% 18%, rgba(217, 167, 91, 0.16), transparent 60%),
-    radial-gradient(620px circle at 88% 82%, rgba(47, 205, 168, 0.14), transparent 60%);
+    radial-gradient(520px circle at 12% 18%, rgba(62, 123, 255, 0.16), transparent 60%),
+    radial-gradient(760px circle at 88% 82%, rgba(47, 205, 168, 0.30), transparent 64%),
+    radial-gradient(520px circle at 50% 100%, rgba(47, 205, 168, 0.14), transparent 68%);
+}
+
+/* Same mesh, used just for the What We Do hero — the bottom-corner glow is
+   dialed back here since that hero also carries the particle field and
+   logo glow, and the full-strength mesh on top of those was too much. */
+.bg-kaizen-mesh-wwd-hero {
+  background-image:
+    radial-gradient(520px circle at 12% 18%, rgba(62, 123, 255, 0.08), transparent 60%),
+    radial-gradient(760px circle at 88% 82%, rgba(47, 205, 168, 0.14), transparent 64%),
+    radial-gradient(520px circle at 50% 100%, rgba(47, 205, 168, 0.035), transparent 68%);
 }
 
 /* Faint precision grid — nods to the checklists/process the brand is built on */
@@ -108,7 +108,7 @@ h1, h2, h3, h4 {
   background-image: linear-gradient(
     100deg,
     transparent 30%,
-    rgba(217, 167, 91, 0.16) 50%,
+    rgba(62, 123, 255, 0.16) 50%,
     transparent 70%
   );
   background-size: 200% 100%;
@@ -143,7 +143,7 @@ h1, h2, h3, h4 {
   pointer-events: none;
   background: radial-gradient(
     480px circle at var(--mx, 50%) var(--my, 30%),
-    rgba(217, 167, 91, 0.07),
+    rgba(62, 123, 255, 0.07),
     transparent 70%
   );
   transition: background 0.15s ease-out;
@@ -172,7 +172,7 @@ h1, h2, h3, h4 {
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(217, 167, 91, 0.22) 20%, rgba(217, 167, 91, 0.22) 80%, transparent);
+  background: linear-gradient(90deg, transparent, rgba(47, 205, 168, 0.22) 20%, rgba(47, 205, 168, 0.22) 80%, transparent);
 }
 
 /* For sections with their own distinct background tone (dark bands, tinted

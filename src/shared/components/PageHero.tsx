@@ -68,7 +68,7 @@ export default function PageHero({
         <motion.div initial="hidden" animate="visible" variants={fadeUp}>
           <motion.span
             variants={fadeUp}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-gold/30 bg-gold/10 text-gold font-label-bold text-label-bold mb-8"
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-teal/30 bg-teal/10 text-teal font-label-bold text-label-bold mb-8"
           >
             <span className="h-1.5 w-1.5 rounded-full bg-teal" />
             {eyebrow}
@@ -101,7 +101,7 @@ export default function PageHero({
           <motion.div variants={fadeUp} custom={0.4} initial="hidden" animate="visible" className="flex flex-col sm:flex-row gap-4">
             <a
               href={primaryHref}
-              className="group bg-primary-container text-on-primary font-label-bold text-label-bold px-8 py-4 rounded-full transition-all duration-300 shadow-glow hover:shadow-glow-hover hover:bg-navy-deep hover:text-gold hover:scale-[1.02] flex items-center justify-center gap-2 focus-ring"
+              className="group bg-primary-container text-on-primary font-label-bold text-label-bold px-8 py-4 rounded-full transition-all duration-300 shadow-glow hover:shadow-glow-hover hover:bg-navy-deep hover:text-teal hover:scale-[1.02] flex items-center justify-center gap-2 focus-ring"
             >
               {primaryCta}
               <MaterialIcon
@@ -112,7 +112,7 @@ export default function PageHero({
             </a>
             <a
               href={secondaryHref}
-              className="bg-transparent border-2 border-gold/40 text-gold font-label-bold text-label-bold px-8 py-4 rounded-full hover:bg-gold/10 hover:border-gold transition-all duration-300 flex items-center justify-center focus-ring"
+              className="bg-transparent border-2 border-blue/40 text-blue font-label-bold text-label-bold px-8 py-4 rounded-full hover:bg-blue/10 hover:border-blue transition-all duration-300 flex items-center justify-center focus-ring"
             >
               {secondaryCta}
             </a>
@@ -126,7 +126,7 @@ export default function PageHero({
           initial={{ opacity: 0, scale: 0.96 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="relative aspect-[4/5] w-full max-w-md mx-auto lg:max-w-none rounded-[2rem] overflow-hidden border border-gold/25 shadow-ambient-hover"
+          className="relative aspect-[4/5] w-full max-w-md mx-auto lg:max-w-none rounded-[2rem] overflow-hidden border border-teal/25 shadow-ambient-hover"
         >
           <motion.img
             src={image.src}
@@ -136,7 +136,7 @@ export default function PageHero({
             className="absolute inset-0 w-full h-full object-cover object-center"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-navy-deep/60 via-transparent to-transparent" />
-          <div className="absolute top-5 right-5 text-gold/80">
+          <div className="absolute top-5 right-5 text-teal/80">
             <KaizenMark size={40} />
           </div>
         </motion.div>

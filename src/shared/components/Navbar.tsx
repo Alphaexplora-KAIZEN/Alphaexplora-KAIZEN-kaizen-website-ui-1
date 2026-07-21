@@ -31,7 +31,7 @@ export default function Navbar({ brand, links }: NavbarProps) {
     <nav
       data-site-navbar
       className={`fixed top-0 w-full z-50 backdrop-blur-md transition-all duration-300 ${
-        scrolled ? 'bg-surface/95 shadow-[0_1px_0_rgba(217,167,91,0.12)]' : 'bg-surface/70'
+        scrolled ? 'bg-surface/95 shadow-[0_1px_0_rgba(47,205,168,0.12)]' : 'bg-surface/70'
       }`}
     >
       <div
@@ -41,7 +41,7 @@ export default function Navbar({ brand, links }: NavbarProps) {
       >
         <Link to="/" className="group flex items-center gap-3.5 focus-ring rounded-lg pl-4 sm:pl-6">
           <img
-            src="/assets/logo_with_name_gold_white_variant_1.png"
+            src="/assets/logo_with_name_white_Blue_Green.png"
             alt={brand.shortName}
             className="h-16 w-auto object-contain transition-transform duration-300 group-hover:scale-[1.04]"
           />
@@ -58,14 +58,14 @@ export default function Navbar({ brand, links }: NavbarProps) {
                   key={link.id}
                   to={link.href}
                   className={`relative font-label-bold font-bold text-base md:text-lg pb-1 transition-colors duration-200 ${
-                    active ? 'text-gold' : 'text-on-surface-variant hover:text-gold'
+                    active ? 'text-teal' : 'text-on-surface-variant hover:text-blue'
                   }`}
                 >
                   {link.label}
                   {active && (
                     <motion.span
                       layoutId="nav-active-underline"
-                      className="absolute left-0 right-0 -bottom-0.5 h-[2px] rounded-full bg-gold"
+                      className="absolute left-0 right-0 -bottom-0.5 h-[2px] rounded-full bg-teal"
                       transition={{ type: 'spring', stiffness: 380, damping: 32 }}
                     />
                   )}
@@ -77,7 +77,7 @@ export default function Navbar({ brand, links }: NavbarProps) {
           <button
             type="button"
             onClick={() => setBookingOpen(true)}
-            className="hidden md:inline-flex bg-primary-container text-on-primary font-label-bold text-label-bold px-6 py-3 rounded-full transition-all duration-200 hover:bg-navy-deep hover:text-gold hover:scale-[1.02] active:scale-95 focus-ring mr-4 sm:mr-6"
+            className="hidden md:inline-flex bg-primary-container text-on-primary font-label-bold text-label-bold px-6 py-3 rounded-full transition-all duration-200 hover:bg-navy-deep hover:text-teal hover:scale-[1.02] active:scale-95 focus-ring mr-4 sm:mr-6"
           >
             Contact Us
           </button>
@@ -86,7 +86,7 @@ export default function Navbar({ brand, links }: NavbarProps) {
             aria-label={open ? 'Close menu' : 'Open menu'}
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
-            className="md:hidden flex h-10 w-10 items-center justify-center rounded-full text-gold focus-ring mr-4 sm:mr-6"
+            className="md:hidden flex h-10 w-10 items-center justify-center rounded-full text-teal focus-ring mr-4 sm:mr-6"
           >
             <MaterialIcon name={open ? 'close' : 'menu'} />
           </button>
@@ -115,8 +115,8 @@ export default function Navbar({ brand, links }: NavbarProps) {
                     onClick={() => setOpen(false)}
                     className={`block rounded-xl px-4 py-3 text-label-bold font-label-bold transition-colors ${
                       isActive(link.href)
-                        ? 'bg-primary-fixed text-gold-deep'
-                        : 'text-on-surface-variant hover:bg-surface-container-low hover:text-gold'
+                        ? 'bg-primary-fixed text-on-primary-fixed'
+                        : 'text-on-surface-variant hover:bg-surface-container-low hover:text-blue'
                     }`}
                   >
                     {link.label}

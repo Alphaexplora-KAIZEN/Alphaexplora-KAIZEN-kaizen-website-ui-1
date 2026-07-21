@@ -68,7 +68,7 @@ export default function TargetSpaces({ data }: TargetSpacesProps) {
                 }`}
               />
 
-              <div className="absolute top-4 left-4 w-12 h-12 rounded-full bg-surface/90 backdrop-blur-sm flex items-center justify-center text-primary shadow-ambient shrink-0">
+              <div className="absolute top-4 left-4 w-12 h-12 rounded-full bg-surface/90 backdrop-blur-sm flex items-center justify-center text-teal shadow-ambient shrink-0">
                 <MaterialIcon name={space.icon} className="text-[24px]" />
               </div>
 

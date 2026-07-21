@@ -56,10 +56,10 @@ export default function ServiceTeasers({ data }: ServiceTeasersProps) {
           variants={fadeUp}
           className="max-w-2xl mb-8"
         >
-          <span className="inline-flex items-center gap-2 font-label-bold text-label-bold text-gold uppercase tracking-wider mb-3">
+          <span className="inline-flex items-center gap-2 font-label-bold text-label-bold text-blue uppercase tracking-wider mb-3">
             <span className="relative flex h-1.5 w-1.5">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-gold opacity-75" />
-              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-gold" />
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-blue opacity-75" />
+              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-blue" />
             </span>
             What we do
           </span>
@@ -73,7 +73,7 @@ export default function ServiceTeasers({ data }: ServiceTeasersProps) {
           variants={fadeUp}
           custom={0.15}
           onMouseLeave={() => setIsPaused(false)}
-          className="flex flex-col lg:flex-row gap-2 h-[820px] sm:h-[720px] lg:h-[640px] rounded-3xl overflow-hidden border border-gold/20 bg-surface p-1.5"
+          className="flex flex-col lg:flex-row gap-2 h-[820px] sm:h-[720px] lg:h-[640px] rounded-3xl overflow-hidden border border-teal/20 bg-surface p-1.5"
         >
           {services.map((service, index) => {
             const isActive = index === activeIndex;
@@ -128,7 +128,7 @@ export default function ServiceTeasers({ data }: ServiceTeasersProps) {
 
                   {/* Number + icon — always visible, top of every panel */}
                   <div className="absolute top-5 left-5 right-5 flex items-center justify-between">
-                    <span className="font-mono text-xs text-gold/80 tracking-wider">0{index + 1}</span>
+                    <span className="font-mono text-xs text-teal/80 tracking-wider">0{index + 1}</span>
                     <span
                       className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition-colors duration-500 ${
                         isActive ? 'bg-teal-soft text-teal' : 'bg-white/10 text-white/70'
@@ -164,7 +164,7 @@ export default function ServiceTeasers({ data }: ServiceTeasersProps) {
                     <p className="font-body-md text-body-md text-on-primary/85 max-w-md mb-6">{service.description}</p>
                     <Link
                       to={service.href}
-                      className="relative z-10 group/link inline-flex items-center gap-2 font-label-bold text-label-bold text-gold hover:text-primary-fixed transition-colors focus-ring rounded-full"
+                      className="relative z-10 group/link inline-flex items-center gap-2 font-label-bold text-label-bold text-teal hover:text-primary-fixed transition-colors focus-ring rounded-full"
                     >
                       Learn more
                       <MaterialIcon

@@ -12,7 +12,7 @@ function isInternalHref(href: string) {
 
 function FooterLink({ href, label }: { href: string; label: string }) {
   const className =
-    'link-underline font-label-sm text-label-sm text-on-primary/80 hover:text-gold transition-colors';
+    'link-underline font-label-sm text-label-sm text-on-primary/80 hover:text-blue transition-colors';
   if (isInternalHref(href)) {
     return (
       <Link to={href} className={className}>
@@ -45,14 +45,14 @@ export default function Footer({ chrome }: FooterProps) {
 
   return (
     <footer className="relative w-full bg-navy-deep bg-grain py-8 md:py-10 overflow-hidden">
-      <div className="pointer-events-none absolute -top-24 -right-24 h-64 w-64 rounded-full bg-gold/10 blur-3xl" />
+      <div className="pointer-events-none absolute -top-24 -right-24 h-64 w-64 rounded-full bg-teal/10 blur-3xl" />
       <div className="pointer-events-none absolute -bottom-20 -left-16 h-56 w-56 rounded-full bg-teal/10 blur-3xl" />
       <div className="relative max-w-container-max-width mx-auto px-6">
         <div className="grid grid-cols-1 md:grid-cols-[1.3fr_1fr_1fr_1fr] gap-x-grid-gutter gap-y-6 pb-6 md:pb-8 border-b border-on-primary/15">
           <div className="space-y-3">
             <Link to="/" className="inline-flex items-center gap-2.5 group">
               <img
-                src="/assets/logo.png"
+                src="/assets/logo_with_name_white_Blue_Green.png"
                 alt={chrome.brand.shortName}
                 className="h-9 w-auto object-contain transition-transform duration-300 group-hover:scale-[1.04]"
               />
@@ -62,14 +62,14 @@ export default function Footer({ chrome }: FooterProps) {
               <a
                 href={contactInfo.emailHref}
                 aria-label="Email us"
-                className="text-on-primary/80 hover:text-gold hover:-translate-y-0.5 transition-all duration-200"
+                className="text-on-primary/80 hover:text-blue hover:-translate-y-0.5 transition-all duration-200"
               >
                 <MaterialIcon name="mail" />
               </a>
               <a
                 href={contactInfo.propertyManagementPhoneHref}
                 aria-label="Call us"
-                className="text-on-primary/80 hover:text-gold hover:-translate-y-0.5 transition-all duration-200"
+                className="text-on-primary/80 hover:text-blue hover:-translate-y-0.5 transition-all duration-200"
               >
                 <MaterialIcon name="call" />
               </a>
@@ -78,7 +78,7 @@ export default function Footer({ chrome }: FooterProps) {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Follow us on Facebook"
-                className="text-on-primary/80 hover:text-gold hover:-translate-y-0.5 transition-all duration-200"
+                className="text-on-primary/80 hover:text-blue hover:-translate-y-0.5 transition-all duration-200"
               >
                 <FacebookIcon />
               </a>
@@ -87,7 +87,7 @@ export default function Footer({ chrome }: FooterProps) {
 
           {chrome.footerGroups.map((group) => (
             <div key={group.id} className="space-y-2.5">
-              <h4 className="font-label-bold text-label-bold text-gold uppercase tracking-wider">{group.title}</h4>
+              <h4 className="font-label-bold text-label-bold text-blue uppercase tracking-wider">{group.title}</h4>
               <ul className="space-y-1.5">
                 {group.links.map((link) => (
                   <li key={link.id}>
@@ -104,7 +104,7 @@ export default function Footer({ chrome }: FooterProps) {
           <button
             type="button"
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="group inline-flex items-center gap-1.5 font-label-bold text-label-bold text-on-primary/70 hover:text-gold transition-colors focus-ring rounded"
+            className="group inline-flex items-center gap-1.5 font-label-bold text-label-bold text-on-primary/70 hover:text-blue transition-colors focus-ring rounded"
           >
             Back to top
             <MaterialIcon

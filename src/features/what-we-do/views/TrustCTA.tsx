@@ -24,7 +24,7 @@ export default function TrustCTA() {
           variants={fadeUp}
           className="relative overflow-hidden bg-navy-deep bg-grain rounded-[40px] px-8 py-16 md:px-16 md:py-20 text-center"
         >
-          <div className="pointer-events-none absolute -top-32 -left-16 h-72 w-72 rounded-full bg-gold/10 blur-3xl" />
+          <div className="pointer-events-none absolute -top-32 -left-16 h-72 w-72 rounded-full bg-teal/10 blur-3xl" />
           <div className="pointer-events-none absolute -bottom-24 -right-16 h-72 w-72 rounded-full bg-teal/10 blur-3xl" />
 
           <motion.div
@@ -35,7 +35,7 @@ export default function TrustCTA() {
           >
             {STATS.map((stat) => (
               <motion.div key={stat.id} variants={fadeUp} className="text-center">
-                <p className="font-mono tabular-nums text-headline-md text-[32px] font-semibold text-gold">
+                <p className="font-mono tabular-nums text-headline-md text-[32px] font-semibold text-blue">
                   <CountUp value={stat.value} active={isInView} />
                 </p>
                 <p className="font-body-md text-body-md text-primary-fixed-dim mt-1">{stat.label}</p>
@@ -52,13 +52,13 @@ export default function TrustCTA() {
           <div className="relative flex flex-col sm:flex-row gap-4 justify-center">
             <a
               href="tel:+639196778350"
-              className="inline-flex items-center justify-center gap-2 bg-gold text-navy-deep font-label-bold text-label-bold px-8 py-4 rounded-full hover:bg-primary-fixed hover:scale-[1.02] transition-all duration-300 shadow-glow hover:shadow-glow-hover focus-ring"
+              className="inline-flex items-center justify-center gap-2 bg-blue text-white font-label-bold text-label-bold px-8 py-4 rounded-full hover:bg-navy hover:scale-[1.02] transition-all duration-300 shadow-glow hover:shadow-glow-hover focus-ring"
             >
               Call Property Management
             </a>
             <a
               href="tel:+639120875598"
-              className="inline-flex items-center justify-center gap-2 bg-transparent border-2 border-gold/40 text-gold font-label-bold text-label-bold px-8 py-4 rounded-full hover:bg-gold/10 hover:border-gold transition-all duration-300 focus-ring"
+              className="inline-flex items-center justify-center gap-2 bg-transparent border-2 border-teal/40 text-teal font-label-bold text-label-bold px-8 py-4 rounded-full hover:bg-teal/10 hover:border-teal transition-all duration-300 focus-ring"
             >
               Call Cleaning & Aircon
             </a>

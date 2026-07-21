@@ -26,17 +26,17 @@ export default function Story({ data }: StoryProps) {
   const isInView = useInView(sectionRef, { once: true, amount: 0.2, margin: '-80px' });
 
   return (
-    <Section divider className="py-section-gap-mobile md:py-section-gap-desktop">
+    <Section divider className="min-h-screen flex flex-col justify-center py-section-gap-mobile md:py-section-gap-desktop">
       <div className="max-w-container-max-width mx-auto px-6">
         <motion.div
           ref={sectionRef}
           initial="hidden"
           animate={isInView ? 'visible' : 'hidden'}
           variants={fadeUpLarge}
-          className="max-w-2xl space-y-3 mb-14 md:mb-16"
+          className="max-w-2xl space-y-3 mb-16 md:mb-20"
         >
-          <span className="inline-flex items-center gap-2 font-label-bold text-label-bold text-gold uppercase tracking-wider">
-            <span className="h-1.5 w-1.5 rounded-full bg-gold" />
+          <span className="inline-flex items-center gap-2 font-label-bold text-label-bold text-blue uppercase tracking-wider">
+            <span className="h-1.5 w-1.5 rounded-full bg-blue" />
             Family-run, since day one
           </span>
           <h2 className="font-display-lg-mobile text-display-lg-mobile lg:font-display-lg lg:text-display-lg text-primary">
@@ -56,10 +56,10 @@ export default function Story({ data }: StoryProps) {
               key={paragraph}
               variants={fadeUp}
               custom={index * 0.15}
-              className={`py-8 md:py-10 ${index === 0 ? 'md:pr-10 md:border-r border-b md:border-b-0 border-outline-variant' : 'md:pl-10'}`}
+              className={`py-10 md:py-14 ${index === 0 ? 'md:pr-10 md:border-r border-b md:border-b-0 border-outline-variant' : 'md:pl-10'}`}
             >
-              <span className="block font-mono text-sm text-gold mb-4">0{index + 1}</span>
-              <p className="font-body-lg text-body-lg text-on-surface-variant">{paragraph}</p>
+              <span className="block font-mono text-sm text-teal mb-4">0{index + 1}</span>
+              <p className="font-body-lg text-body-lg md:text-[19px] text-on-surface-variant">{paragraph}</p>
             </motion.div>
           ))}
         </motion.div>
@@ -69,22 +69,22 @@ export default function Story({ data }: StoryProps) {
           variants={staggerContainer}
           initial="hidden"
           animate={isInView ? 'visible' : 'hidden'}
-          className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4"
+          className="grid grid-cols-1 sm:grid-cols-3 gap-5 md:gap-6 mt-10 md:mt-14"
         >
           {data.milestones.map((milestone) => (
             <motion.div
               key={milestone.id}
               variants={fadeUp}
-              className="flex items-center gap-4 rounded-2xl border border-outline-variant p-5 sm:p-6"
+              className="flex items-center gap-5 rounded-2xl border border-outline-variant p-6 sm:p-8"
             >
-              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-teal-soft text-teal">
-                <MaterialIcon name={MILESTONE_ICON[milestone.id] ?? 'star'} filled className="text-xl" />
+              <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-teal-soft text-teal">
+                <MaterialIcon name={MILESTONE_ICON[milestone.id] ?? 'star'} filled className="text-2xl" />
               </span>
               <span>
-                <span className="block font-mono tabular-nums text-headline-sm text-xl text-primary">
+                <span className="block font-mono tabular-nums text-headline-sm text-2xl text-primary">
                   {milestone.value}
                 </span>
-                <span className="block font-label-sm text-label-sm text-on-surface-variant mt-0.5">
+                <span className="block font-label-sm text-label-sm text-on-surface-variant mt-1">
                   {milestone.label}
                 </span>
               </span>

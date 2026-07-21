@@ -29,6 +29,12 @@ const VALUE_LETTER: Record<string, string> = {
 const TRAVEL_MS = 1500;
 const HOLD_MS = 1500;
 
+// Single shared curve + duration for every "lit" state change (tick dot,
+// card border/glow, icon circle) so they animate in lockstep instead of
+// each drifting slightly out of sync with its own timing.
+const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
+const LIT_TRANSITION = { duration: 0.4, ease: EASE };
+
 /**
  * "The Values Behind Every Job" — redesigned as a row of ledger cards along
  * a T·I·M·E circuit rail, matching the rest of the About page's dark
@@ -49,10 +55,16 @@ const HOLD_MS = 1500;
  *
  * A rail above the cards travels to each waypoint in sequence, lighting a
  * tick mark and its card together, holding for a beat, then moving to the
- * next — until the whole word is lit, then it dims and loops. The dense
- * field of small clock icons behind everything (this section's "On
- * T.I.M.E." theme) drifts away from the cursor, now at a low enough
- * opacity to read as ambient texture rather than compete with the cards.
+ * next — until the whole word is lit, then it dims and loops. This rail,
+ * its tick marks, the card border/glow, and the letter-circle glow all
+ * animate on one shared duration/easing curve (`LIT_TRANSITION`) and the
+ * rail now renders identically on mobile and desktop — previously mobile
+ * had its own vertical rail that sat in a zero-height wrapper and never
+ * actually appeared, so cards there lit up with no traveling indicator at
+ * all. The dense field of small clock icons behind everything (this
+ * section's "On T.I.M.E." theme) drifts away from the cursor, now at a low
+ * enough opacity to read as ambient texture rather than compete with the
+ * cards.
  */
 export default function Values({ coreValues }: ValuesProps) {
   const sectionRef = useRef(null);
@@ -105,11 +117,21 @@ export default function Values({ coreValues }: ValuesProps) {
     function travelTo(step: number) {
       if (cancelled) return;
       if (step > coreValues.length) {
-        // Whole word has held lit for a beat — dim everything and, after a
-        // travel-length breath, start the sequence over.
-        setFillTarget(0);
-        setLitCount(0);
-        timeoutId = setTimeout(() => travelTo(1), TRAVEL_MS);
+        // Whole word is lit and has held for a beat — rather than dimming
+        // right here (which stopped the rail short, at the last tick's
+        // center), let it keep traveling to the very end of the line first.
+        setFillTarget(step);
+        timeoutId = setTimeout(() => {
+          if (cancelled) return;
+          // Rail has reached the end — hold there, then dim everything and,
+          // after a travel-length breath, start the sequence over.
+          timeoutId = setTimeout(() => {
+            if (cancelled) return;
+            setFillTarget(0);
+            setLitCount(0);
+            timeoutId = setTimeout(() => travelTo(1), TRAVEL_MS);
+          }, HOLD_MS);
+        }, TRAVEL_MS);
         return;
       }
       setFillTarget(step);
@@ -134,13 +156,15 @@ export default function Values({ coreValues }: ValuesProps) {
   // center instead makes the rail stop exactly on it.
   const fillPercent =
     coreValues.length > 0 && fillTarget > 0
-      ? ((fillTarget - 0.5) / coreValues.length) * 100
+      ? fillTarget > coreValues.length
+        ? 100
+        : ((fillTarget - 0.5) / coreValues.length) * 100
       : 0;
 
   return (
     <Section
       divider
-      className="relative isolate overflow-hidden py-section-gap-mobile md:py-section-gap-desktop bg-navy-deep"
+      className="relative isolate overflow-hidden min-h-screen flex flex-col justify-center py-section-gap-mobile md:py-section-gap-desktop bg-navy-deep"
     >
       {/* Pointer tracking lives on THIS wrapper, which is an ANCESTOR of
           both the clock backdrop and the content column below, so pointer
@@ -161,7 +185,7 @@ export default function Values({ coreValues }: ValuesProps) {
             pointerRef={pointerRef}
             count={70}
             icon="schedule"
-            colorClassName="text-gold"
+            colorClassName="text-white"
             maxOpacity={0.22}
             seed={42}
           />
@@ -175,8 +199,8 @@ export default function Values({ coreValues }: ValuesProps) {
             variants={fadeUp}
             className="max-w-2xl mb-16 md:mb-20 space-y-3"
           >
-            <span className="inline-flex items-center gap-2 font-label-bold text-label-bold text-gold uppercase tracking-wider">
-              <span className="h-1.5 w-1.5 rounded-full bg-gold" />
+            <span className="inline-flex items-center gap-2 font-label-bold text-label-bold text-teal uppercase tracking-wider">
+              <span className="h-1.5 w-1.5 rounded-full bg-teal" />
               On T.I.M.E.
             </span>
             <h2 className="font-headline-md text-[34px] md:text-[44px] font-bold leading-[1.1] text-on-surface">
@@ -190,42 +214,34 @@ export default function Values({ coreValues }: ValuesProps) {
             animate={isInView ? 'visible' : 'hidden'}
             className="relative"
           >
-            {/* Circuit rail — horizontal above the cards on desktop,
-                vertical to the left of the stack on mobile. A gold fill
-                grows behind the boot-up sequence to show progress across
-                the whole word, with a tick mark lighting at each card as
-                the rail reaches it. */}
-            <div className="hidden md:block relative h-8 mb-6">
+            {/* Circuit rail — one horizontal rail across every breakpoint (previously
+                mobile had its own vertical rail, which sat in a zero-height wrapper
+                and never actually rendered — cards there just lit up with no
+                traveling indicator). A single rail means mobile and desktop now
+                show the exact same "boot-up" animation. */}
+            <div className="relative h-10 mb-8">
               <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-px bg-outline-variant/50" />
               <div
-                className="absolute left-0 top-1/2 -translate-y-1/2 h-px bg-gold transition-[width] ease-linear"
+                className="absolute left-0 top-1/2 -translate-y-1/2 h-px bg-teal transition-[width] ease-linear"
                 style={{ width: `${fillPercent}%`, transitionDuration: `${TRAVEL_MS}ms` }}
               />
               {coreValues.map((value, index) => (
                 <motion.span
                   key={value.id}
-                  className="absolute top-1/2 h-2.5 w-2.5 rounded-full border border-gold/60 bg-navy-deep"
+                  className="absolute top-1/2 h-2.5 w-2.5 rounded-full border border-teal/60 bg-navy-deep"
                   style={{ left: `${((index + 0.5) / coreValues.length) * 100}%` }}
                   animate={{
                     scale: index < litCount ? 1.4 : 1,
-                    backgroundColor: index < litCount ? 'rgba(217,167,91,1)' : 'rgba(5,13,24,1)',
+                    backgroundColor: index < litCount ? 'rgba(47,205,168,1)' : 'rgba(5,13,24,1)',
                     x: '-50%',
                     y: '-50%',
                   }}
-                  transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                  transition={LIT_TRANSITION}
                 />
               ))}
             </div>
 
-            <div className="relative md:hidden">
-              <div className="absolute left-0 top-2 bottom-2 w-px bg-outline-variant/50" />
-              <div
-                className="absolute left-0 top-2 w-px bg-gold transition-[height] ease-linear"
-                style={{ height: `${fillPercent}%`, transitionDuration: `${TRAVEL_MS}ms` }}
-              />
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-5 md:gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 md:gap-8">
               {coreValues.map((value, index) => {
                 const isLit = index < litCount;
                 return (
@@ -233,37 +249,37 @@ export default function Values({ coreValues }: ValuesProps) {
                     key={value.id}
                     variants={fadeUp}
                     custom={index * 0.1}
-                    className="relative"
+                    className="relative h-full"
                   >
                   <motion.div
                     animate={{
-                      borderColor: isLit ? 'rgba(217,167,91,0.55)' : 'rgba(35,55,79,1)',
+                      borderColor: isLit ? 'rgba(47,205,168,0.55)' : 'rgba(35,55,79,1)',
                       boxShadow: isLit
-                        ? '0 0 0 1px rgba(217,167,91,0.15), 0 16px 32px -12px rgba(217,167,91,0.25)'
-                        : '0 0 0 0 rgba(217,167,91,0)',
+                        ? '0 0 0 1px rgba(47,205,168,0.15), 0 16px 32px -12px rgba(47,205,168,0.25)'
+                        : '0 0 0 0 rgba(47,205,168,0)',
                     }}
-                    transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                    className="relative flex md:flex-col items-start md:items-center gap-5 md:gap-0 md:text-center rounded-2xl border bg-surface-container p-6 md:p-7"
+                    transition={LIT_TRANSITION}
+                    className="relative flex h-full md:flex-col items-start md:items-center gap-5 md:gap-0 md:text-center rounded-2xl border bg-surface-container p-7 md:p-9"
                   >
                     <motion.div
                       animate={{
                         scale: isLit ? 1.08 : 1,
-                        borderColor: isLit ? 'rgba(217,167,91,1)' : 'rgba(217,167,91,0.35)',
+                        borderColor: isLit ? 'rgba(47,205,168,1)' : 'rgba(47,205,168,0.35)',
                         boxShadow: isLit
-                          ? '0 0 0 1px rgba(217,167,91,0.4), 0 0 24px 4px rgba(217,167,91,0.45)'
-                          : '0 0 0 0 rgba(217,167,91,0)',
+                          ? '0 0 0 1px rgba(47,205,168,0.4), 0 0 24px 4px rgba(47,205,168,0.45)'
+                          : '0 0 0 0 rgba(47,205,168,0)',
                       }}
-                      transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                      className="relative z-10 flex h-16 w-16 shrink-0 items-center justify-center rounded-full border-2 bg-navy-deep md:mb-5 font-mono text-2xl text-gold"
+                      transition={LIT_TRANSITION}
+                      className="relative z-10 flex h-20 w-20 shrink-0 items-center justify-center rounded-full border-2 bg-navy-deep md:mb-6 font-mono text-3xl text-teal"
                     >
                       {VALUE_LETTER[value.id] ?? '•'}
-                      <span className="absolute -bottom-1 -right-1 flex h-6 w-6 items-center justify-center rounded-full bg-teal-soft text-teal ring-4 ring-surface-container">
-                        <MaterialIcon name={VALUE_ICON[value.id] ?? 'star'} filled className="text-[13px]" />
+                      <span className="absolute -bottom-1 -right-1 flex h-7 w-7 items-center justify-center rounded-full bg-teal-soft text-teal ring-4 ring-surface-container">
+                        <MaterialIcon name={VALUE_ICON[value.id] ?? 'star'} filled className="text-[15px]" />
                       </span>
                     </motion.div>
                     <div className="pt-1 md:pt-0">
-                      <p className="font-label-bold text-lg text-on-surface mb-1.5">{value.title}</p>
-                      <p className="font-body-md text-body-md text-on-surface-variant md:max-w-[210px] md:mx-auto">
+                      <p className="font-label-bold text-xl text-on-surface mb-2">{value.title}</p>
+                      <p className="font-body-md text-body-md md:text-[17px] text-on-surface-variant md:max-w-[230px] md:mx-auto text-justify">
                         {value.description}
                       </p>
                     </div>

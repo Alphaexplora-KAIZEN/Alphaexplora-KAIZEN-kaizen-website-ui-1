@@ -61,7 +61,7 @@ export default function ServiceSummaryCard({
   return (
     <Section
       id={id}
-      className={`scroll-mt-[var(--wwd-sticky-offset)] snap-start snap-always relative min-h-[calc(100dvh-5rem)] lg:h-[calc(100dvh-5rem)] flex flex-col ${
+      className={`scroll-mt-[var(--wwd-sticky-offset)] relative min-h-[calc(100dvh-5rem)] lg:h-[calc(100dvh-5rem)] flex flex-col ${
         index > 1 ? 'border-t border-outline-variant' : ''
       }`}
     >
@@ -97,13 +97,13 @@ export default function ServiceSummaryCard({
           style={reverse ? { direction: 'ltr' } : undefined}
         >
           <div className="pointer-events-none absolute inset-0 bg-kaizen-mesh" />
-          <div className={`pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full blur-3xl opacity-10 ${theme.bar ?? 'bg-gold'}`} />
+          <div className={`pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full blur-3xl opacity-10 ${theme.bar ?? 'bg-teal'}`} />
 
           <div className="relative z-10">
             <span
               className={`inline-flex items-center gap-2 font-mono text-[13px] uppercase tracking-[0.3em] mb-5 font-bold ${theme.accent}`}
             >
-              <span className={`h-1.5 w-1.5 rounded-full ${theme.bar ?? 'bg-gold'}`} />
+              <span className={`h-1.5 w-1.5 rounded-full ${theme.bar ?? 'bg-teal'}`} />
               Kaizen Specialty
             </span>
 
@@ -125,7 +125,7 @@ export default function ServiceSummaryCard({
             <button
               type="button"
               onClick={onCtaClick}
-              className="group/link inline-flex items-center gap-2.5 font-label-bold text-lg text-on-surface hover:text-primary transition-colors focus-ring w-fit mb-4"
+              className="group/link inline-flex items-center gap-2.5 font-label-bold text-lg text-on-surface hover:text-teal transition-colors focus-ring w-fit mb-4"
             >
               {ctaLabel}
               <MaterialIcon
@@ -135,7 +135,7 @@ export default function ServiceSummaryCard({
               />
             </button>
 
-            <div className={`h-px w-14 transition-all duration-700 group-hover:w-28 ${theme.bar ?? 'bg-gold'}`} />
+            <div className={`h-px w-14 transition-all duration-700 group-hover:w-28 ${theme.bar ?? 'bg-teal'}`} />
           </div>
         </div>
       </motion.div>

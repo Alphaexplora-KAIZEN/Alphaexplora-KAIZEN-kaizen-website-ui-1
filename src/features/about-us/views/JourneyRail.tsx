@@ -13,7 +13,7 @@ function RailLabel({ label, atPct, progress }: { label: string; atPct: number; p
   const color = useTransform(
     progress,
     [Math.max(atPct / 100 - 0.06, 0), atPct / 100],
-    ['rgba(148,163,184,0.5)', 'rgba(217,167,91,1)'],
+    ['rgba(148,163,184,0.5)', 'rgba(62,123,255,1)'],
   );
 
   return (
@@ -48,10 +48,10 @@ export default function JourneyRail({ targetRef, labels }: JourneyRailProps) {
       style={{ height: '46vh' }}
     >
       <div className="relative h-full w-px bg-outline-variant/25">
-        <motion.div className="absolute left-0 top-0 w-px bg-gradient-to-b from-gold to-teal" style={{ height: fillHeight }} />
+        <motion.div className="absolute left-0 top-0 w-px bg-gradient-to-b from-blue to-teal" style={{ height: fillHeight }} />
 
         <motion.div
-          className="absolute -left-[5px] h-[11px] w-[11px] rounded-full bg-gold shadow-glow ring-4 ring-background"
+          className="absolute -left-[5px] h-[11px] w-[11px] rounded-full bg-teal shadow-glow ring-4 ring-background"
           style={{ top: dotTop, translateY: '-50%' }}
         />
 

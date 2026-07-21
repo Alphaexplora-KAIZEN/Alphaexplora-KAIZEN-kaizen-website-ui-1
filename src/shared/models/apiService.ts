@@ -428,7 +428,7 @@ export async function fetchHomepageData(): Promise<HomepageData> {
 
 const ABOUT_US_DATA: AboutUsData = {
   eyebrow: 'About Kaizen Optima Solutions',
-  headline: 'Family-Owned. Community-Trusted.',
+  headline: 'About KAIZEN OPTIMA SOLUTIONS',
   subheadline:
     'We started Kaizen Optima Solutions with a simple belief: property owners and everyday families deserve the same level of care a five-star hospitality brand gives its guests.',
   primaryCta: 'Get a Free Appraisal',

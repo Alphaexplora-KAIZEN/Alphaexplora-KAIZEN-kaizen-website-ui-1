@@ -88,7 +88,7 @@ function PlanRow({
             <MaterialIcon name={plan.icon} className="text-teal text-xl" />
             <h3 className="font-headline-sm text-headline-sm text-on-surface">{plan.title}</h3>
             {plan.badge && (
-              <span className="font-label-sm text-label-sm uppercase tracking-wider text-gold ml-1">{plan.badge}</span>
+              <span className="font-label-sm text-label-sm uppercase tracking-wider text-teal ml-1">{plan.badge}</span>
             )}
           </div>
           <p className="font-body-md text-body-md text-on-surface-variant mb-6 max-w-xl">{plan.description}</p>

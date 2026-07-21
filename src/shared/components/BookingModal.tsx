@@ -17,7 +17,7 @@ const SERVICE_OPTIONS = [
 ];
 
 const inputClasses =
-  'w-full rounded-xl border border-outline-variant bg-surface px-4 py-3 font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant/60 focus:outline-none focus:ring-2 focus:ring-gold focus:border-gold transition-colors';
+  'w-full rounded-xl border border-outline-variant bg-surface px-4 py-3 font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant/60 focus:outline-none focus:ring-2 focus:ring-blue focus:border-blue transition-colors';
 
 export default function BookingModal({ open, onClose }: BookingModalProps) {
   const [submitted, setSubmitted] = useState(false);
@@ -113,7 +113,7 @@ export default function BookingModal({ open, onClose }: BookingModalProps) {
                 <button
                   type="button"
                   onClick={onClose}
-                  className="mt-6 inline-flex bg-primary-container text-on-primary font-label-bold text-label-bold px-6 py-3 rounded-full hover:bg-navy-deep hover:text-gold transition-all duration-200 focus-ring"
+                  className="mt-6 inline-flex bg-primary-container text-on-primary font-label-bold text-label-bold px-6 py-3 rounded-full hover:bg-navy-deep hover:text-teal transition-all duration-200 focus-ring"
                 >
                   Done
                 </button>
@@ -229,7 +229,7 @@ export default function BookingModal({ open, onClose }: BookingModalProps) {
 
                 <button
                   type="submit"
-                  className="mt-6 w-full inline-flex items-center justify-center bg-primary-container text-on-primary font-label-bold text-label-bold px-6 py-3.5 rounded-full hover:bg-navy-deep hover:text-gold transition-all duration-200 shadow-glow hover:shadow-glow-hover active:scale-95 focus-ring"
+                  className="mt-6 w-full inline-flex items-center justify-center bg-primary-container text-on-primary font-label-bold text-label-bold px-6 py-3.5 rounded-full hover:bg-navy-deep hover:text-teal transition-all duration-200 shadow-glow hover:shadow-glow-hover active:scale-95 focus-ring"
                 >
                   Submit Request
                 </button>

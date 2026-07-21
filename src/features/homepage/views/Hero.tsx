@@ -102,7 +102,7 @@ export default function Hero({ data }: HeroProps) {
           <motion.div variants={fadeUp} custom={0.4} initial="hidden" animate="visible" className="flex flex-col sm:flex-row gap-5">
             <a
               href={data.primaryHref}
-              className="group bg-primary-container text-on-primary font-label-bold text-label-bold px-8 py-4 rounded-full transition-all duration-300 shadow-glow hover:shadow-glow-hover hover:bg-navy-deep hover:text-gold hover:scale-[1.02] flex items-center justify-center gap-2 focus-ring"
+              className="group bg-primary-container text-on-primary font-label-bold text-label-bold px-8 py-4 rounded-full transition-all duration-300 shadow-glow hover:shadow-glow-hover hover:bg-navy-deep hover:text-teal hover:scale-[1.02] flex items-center justify-center gap-2 focus-ring"
             >
               {data.primaryCta}
               <MaterialIcon
@@ -113,7 +113,7 @@ export default function Hero({ data }: HeroProps) {
             </a>
             <a
               href={data.secondaryHref}
-              className="bg-transparent border-2 border-gold/40 text-gold font-label-bold text-label-bold px-8 py-4 rounded-full hover:bg-gold/10 hover:border-gold transition-all duration-300 flex items-center justify-center focus-ring"
+              className="bg-transparent border-2 border-blue/40 text-blue font-label-bold text-label-bold px-8 py-4 rounded-full hover:bg-blue/10 hover:border-blue transition-all duration-300 flex items-center justify-center focus-ring"
             >
               {data.secondaryCta}
             </a>

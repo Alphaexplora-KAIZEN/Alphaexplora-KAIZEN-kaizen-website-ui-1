@@ -60,7 +60,7 @@ export default function QuickNav() {
               href={link.href}
               aria-current={isActive ? 'true' : undefined}
               className={`group relative flex shrink-0 items-center gap-2 rounded-full px-4 py-2 font-label-bold text-label-bold transition-colors duration-300 focus-ring ${
-                isActive ? 'text-navy-deep' : 'text-on-surface-variant hover:text-primary'
+                isActive ? 'text-navy-deep' : 'text-on-surface-variant hover:text-teal'
               }`}
             >
               {isActive && (

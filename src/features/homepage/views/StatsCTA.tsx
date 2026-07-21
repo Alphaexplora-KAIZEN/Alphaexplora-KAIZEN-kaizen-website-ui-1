@@ -26,10 +26,10 @@ export default function StatsCTA({ data }: StatsCTAProps) {
   const isInView = useInView(sectionRef, { once: true, amount: 0.2, margin: '-80px' });
 
   return (
-    <Section seam className="relative py-16 md:py-20 bg-navy-deep bg-grain border-y border-gold/20 overflow-hidden">
-      <div className="pointer-events-none absolute -top-24 -left-16 h-64 w-64 rounded-full bg-gold/10 blur-3xl animate-float" />
+    <Section seam className="relative py-16 md:py-20 bg-navy-deep bg-grain border-y border-teal/20 overflow-hidden">
+      <div className="pointer-events-none absolute -top-24 -left-16 h-64 w-64 rounded-full bg-teal/10 blur-3xl animate-float" />
       <div className="pointer-events-none absolute -bottom-24 -right-16 h-64 w-64 rounded-full bg-teal/10 blur-3xl animate-float-delay" />
-      <div className="pointer-events-none absolute -right-16 top-1/2 hidden -translate-y-1/2 text-gold/[0.06] lg:block">
+      <div className="pointer-events-none absolute -right-16 top-1/2 hidden -translate-y-1/2 text-teal/[0.06] lg:block">
         <KaizenMark size={240} />
       </div>
 
@@ -48,9 +48,9 @@ export default function StatsCTA({ data }: StatsCTAProps) {
                 variants={fadeUp}
                 whileHover={{ y: -3 }}
                 transition={{ type: 'spring', stiffness: 300, damping: 22 }}
-                className={`text-left ${index > 0 ? 'md:pl-10 md:ml-10 md:border-l md:border-gold/20' : ''}`}
+                className={`text-left ${index > 0 ? 'md:pl-10 md:ml-10 md:border-l md:border-teal/20' : ''}`}
               >
-                <p className="font-mono tabular-nums text-headline-md text-[30px] font-semibold text-gold">
+                <p className="font-mono tabular-nums text-headline-md text-[30px] font-semibold text-blue">
                   <CountUp value={stat.value} active={isInView} />
                 </p>
                 <p className="font-body-md text-body-md text-primary-fixed-dim mt-1 whitespace-nowrap">{stat.label}</p>
@@ -60,7 +60,7 @@ export default function StatsCTA({ data }: StatsCTAProps) {
 
           <motion.div
             variants={fadeUp}
-            className="md:pl-10 md:ml-10 md:border-l md:border-gold/20 flex-1 flex flex-col md:flex-row md:items-center gap-6 md:gap-8"
+            className="md:pl-10 md:ml-10 md:border-l md:border-teal/20 flex-1 flex flex-col md:flex-row md:items-center gap-6 md:gap-8"
           >
             <div className="flex-1">
               <h2 className="font-headline-md text-headline-md text-on-primary mb-2">{data.ctaHeadline}</h2>
@@ -68,7 +68,7 @@ export default function StatsCTA({ data }: StatsCTAProps) {
             </div>
             <a
               href={data.ctaHref}
-              className="group inline-flex items-center justify-center gap-2 bg-gold text-navy-deep font-label-bold text-label-bold px-8 py-4 rounded-full hover:bg-primary-fixed hover:scale-[1.02] transition-all duration-300 shadow-glow hover:shadow-glow-hover focus-ring shrink-0 whitespace-nowrap"
+              className="group inline-flex items-center justify-center gap-2 bg-blue text-white font-label-bold text-label-bold px-8 py-4 rounded-full hover:bg-navy hover:scale-[1.02] transition-all duration-300 shadow-glow hover:shadow-glow-hover focus-ring shrink-0 whitespace-nowrap"
             >
               {data.ctaLabel}
               <MaterialIcon

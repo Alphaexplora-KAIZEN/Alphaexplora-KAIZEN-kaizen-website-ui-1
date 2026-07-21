@@ -85,7 +85,7 @@ export default function IconField({
   pointerRef,
   count = 48,
   icon,
-  colorClassName = 'text-gold',
+  colorClassName = 'text-teal',
   maxOpacity = 0.12,
   seed = 42,
 }: IconFieldProps) {

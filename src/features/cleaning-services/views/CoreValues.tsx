@@ -26,7 +26,7 @@ const VALUE_STYLE: Record<string, { letter: string; icon: string; fact: string; 
     letter: 'M',
     icon: 'workspace_premium',
     fact: 'Every cleaner trains on our checklist system before working solo in the field.',
-    chip: 'text-gold',
+    chip: 'text-teal',
   },
   efficiency: {
     letter: 'E',
@@ -124,7 +124,7 @@ export default function CoreValues({ data }: CoreValuesProps) {
                 {isActive && (
                   <motion.span
                     layoutId="time-letter-underline"
-                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold"
+                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-teal"
                     transition={{ type: 'spring', stiffness: 300, damping: 24 }}
                   />
                 )}

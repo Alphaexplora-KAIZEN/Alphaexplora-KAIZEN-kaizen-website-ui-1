@@ -29,7 +29,7 @@ export default function CTA({ data }: CTAProps) {
         variants={fadeUp}
         className="relative z-10 max-w-3xl mx-auto px-6 text-center space-y-8"
       >
-        <h2 className="font-display-lg text-display-lg-mobile md:text-display-lg text-primary">{data.ctaHeadline}</h2>
+        <h2 className="font-display-lg text-display-lg-mobile md:text-display-lg text-teal">{data.ctaHeadline}</h2>
         <p className="font-body-lg text-body-lg text-on-surface-variant">{data.ctaSubheading}</p>
         <div className="pt-4">
           <a

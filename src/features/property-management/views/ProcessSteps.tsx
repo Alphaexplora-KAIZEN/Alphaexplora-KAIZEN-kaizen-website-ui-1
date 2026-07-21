@@ -9,7 +9,7 @@ interface ProcessStepsProps {
   data: PropertyManagementData;
 }
 
-const STEP_ACCENT = ['text-teal', 'text-blue', 'text-gold'];
+const STEP_ACCENT = ['text-teal', 'text-blue', 'text-teal'];
 
 /**
  * The step-by-step tracker at top stays — it's a hairline rail with dots,
@@ -85,7 +85,7 @@ export default function ProcessSteps({ data }: ProcessStepsProps) {
                   animate={{ scale: isVisited ? 1.1 : 1 }}
                   transition={{ type: 'spring', stiffness: 300, damping: 15 }}
                   className={`relative w-10 h-10 rounded-full flex items-center justify-center font-headline-sm text-sm font-bold flex-shrink-0 transition-colors duration-300 ${
-                    isVisited ? 'bg-gold text-navy-deep' : 'border-2 border-outline-variant text-on-surface-variant'
+                    isVisited ? 'bg-blue text-white' : 'border-2 border-outline-variant text-on-surface-variant'
                   }`}
                 >
                   <AnimatePresence mode="wait" initial={false}>
@@ -112,7 +112,7 @@ export default function ProcessSteps({ data }: ProcessStepsProps) {
                       initial={{ width: '0%' }}
                       animate={{ width: isVisited ? '100%' : '0%' }}
                       transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                      className="h-full bg-gold"
+                      className="h-full bg-blue"
                     />
                   </div>
                 )}
@@ -153,7 +153,7 @@ function StepRow({
       initial="hidden"
       animate={isInView ? 'visible' : 'hidden'}
       variants={fadeUp}
-      className={`border-b border-outline-variant py-8 grid grid-cols-1 sm:grid-cols-[auto_120px_1fr] gap-x-6 gap-y-4 items-center transition-colors duration-500 ${isVisited ? 'bg-gold/5' : ''}`}
+      className={`border-b border-outline-variant py-8 grid grid-cols-1 sm:grid-cols-[auto_120px_1fr] gap-x-6 gap-y-4 items-center transition-colors duration-500 ${isVisited ? 'bg-blue/5' : ''}`}
     >
       <span className={`font-mono text-2xl ${accent}`}>{String(step.step).padStart(2, '0')}</span>
 

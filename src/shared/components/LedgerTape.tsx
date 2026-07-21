@@ -29,13 +29,13 @@ export default function LedgerTape({ items, className = '' }: LedgerTapeProps) {
   return (
     <div
       aria-hidden="true"
-      className={`relative overflow-hidden border-y border-gold/15 bg-navy-deep/70 bg-grain ${className}`}
+      className={`relative overflow-hidden border-y border-teal/20 bg-navy-deep/70 bg-grain ${className}`}
     >
       <div className="flex w-max animate-ticker hover:[animation-play-state:paused]">
         {loop.map((item, i) => (
           <span key={i} className="flex shrink-0 items-center gap-3 py-3 pr-8">
-            <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-gold/70">{item}</span>
-            <span className="h-1 w-1 shrink-0 rounded-full bg-gold/40" />
+            <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-teal/70">{item}</span>
+            <span className="h-1 w-1 shrink-0 rounded-full bg-teal/50" />
           </span>
         ))}
       </div>

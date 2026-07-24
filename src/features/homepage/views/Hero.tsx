@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { fadeUp, fadeUpLarge, staggerFast } from '../../../shared/utils/constants';
 import MaterialIcon from '../../../shared/components/MaterialIcon';
-import KaizenMark from '../../../shared/components/KaizenMark';
 import type { HomepageData } from '../../../shared/models/types';
 
 interface HeroProps {
@@ -67,10 +66,6 @@ export default function Hero({ data }: HeroProps) {
           />
         </AnimatePresence>
 
-      </div>
-
-      <div className="absolute top-[18%] right-[6%] z-10 hidden lg:block text-teal/60 animate-float">
-        <KaizenMark size={64} />
       </div>
 
       <div className="max-w-container-max-width mx-auto px-6 w-full relative z-20">

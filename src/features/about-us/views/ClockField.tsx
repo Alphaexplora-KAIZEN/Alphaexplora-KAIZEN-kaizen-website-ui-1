@@ -10,6 +10,11 @@ export interface PointerState {
 interface ClockFieldProps {
   pointerRef: MutableRefObject<PointerState>;
   count?: number;
+  /** Tailwind text-color class applied to every clock glyph. */
+  colorClassName?: string;
+  /** Caps how large/opaque the field reads — smaller fields sit further back. */
+  maxOpacity?: number;
+  seed?: number;
 }
 
 interface ClockSeed {
@@ -19,37 +24,24 @@ interface ClockSeed {
   size: number;
   rotate: number;
   opacity: number;
-  // Mass affects how sluggishly a clock responds to the cursor's push and
-  // how far it settles — heavier clocks drift less, giving the field some
-  // depth instead of every icon moving identically.
-  mass: number;
-  // Slow independent bobbing/rotation so the field never sits perfectly
-  // still even when the cursor is far away — the "floating in space" idle
-  // motion, layered underneath the cursor-avoidance physics.
-  driftAmpX: number;
-  driftAmpY: number;
-  driftSpeedX: number;
-  driftSpeedY: number;
-  driftPhaseX: number;
-  driftPhaseY: number;
+  vx: number;
+  vy: number;
   spinSpeed: number;
+  spinPhase: number;
 }
 
-// How far (in px) a clock reacts to the cursor, and how hard it gets
-// shoved away when the cursor is right on top of it.
-const REPEL_RADIUS = 150;
-const PUSH_FORCE = 1.4;
-// Spring pulling a clock back toward its resting drift position, and
-// damping applied to velocity each frame — together these give the motion
-// weight and inertia (drifts away, decelerates, eases back) instead of
-// snapping straight to a target.
-const SPRING_K = 0.05;
-const DAMPING = 0.88;
+// Same wandering feel as the "What We Do" hero's ParticleField: clocks
+// drift the section under their own quiet velocity (no fixed rest point to
+// spring back to), bounce off the section's edges, and get nudged away
+// from the cursor when it comes near — rather than the old drift-and-spring
+// physics that kept each icon tethered to one spot.
+const MOUSE_DISTANCE = 170;
+const PUSH_STRENGTH = 1.1;
 
-function seedField(count: number): ClockSeed[] {
+function seedField(count: number, maxOpacity: number, seedValue: number): ClockSeed[] {
   // Deterministic pseudo-random layout (no Math.random) so the scatter is
   // stable across re-renders and server/client — just a simple hash walk.
-  let seed = 42;
+  let seed = seedValue;
   function next() {
     seed = (seed * 9301 + 49297) % 233280;
     return seed / 233280;
@@ -61,39 +53,40 @@ function seedField(count: number): ClockSeed[] {
     topPct: 4 + next() * 92,
     size: 16 + next() * 26,
     rotate: next() * 40 - 20,
-    opacity: 0.28 + next() * 0.34,
-    mass: 0.6 + next() * 1.1,
-    driftAmpX: 6 + next() * 14,
-    driftAmpY: 6 + next() * 14,
-    driftSpeedX: 0.15 + next() * 0.25,
-    driftSpeedY: 0.15 + next() * 0.25,
-    driftPhaseX: next() * Math.PI * 2,
-    driftPhaseY: next() * Math.PI * 2,
+    opacity: maxOpacity * (0.45 + next() * 0.55),
+    vx: (next() - 0.5) * 0.34,
+    vy: (next() - 0.5) * 0.34,
     spinSpeed: (next() - 0.5) * 6,
+    spinPhase: next() * Math.PI * 2,
   }));
 }
 
 /**
  * A dense field of small clock icons scattered behind the "On T.I.M.E."
- * content — standing in for the section's clock-punctuality theme instead
- * of plain glow blobs. Idle, each clock gently bobs and turns on its own
- * slow sine-wave path, like it's floating with no gravity holding it down.
- * When the cursor comes near, it gets pushed away with real inertia — it
- * accelerates off, decelerates, and eases back toward its floating rest
- * position once the cursor moves on — rather than snapping to a fixed
- * offset. Physics run in refs and are applied via direct DOM transforms in
- * a single requestAnimationFrame loop, so cursor movement never triggers a
- * React re-render of the section.
+ * content — now sharing the same wandering behaviour as the ambient
+ * background of the "What We Do" hero (ParticleField): each clock drifts
+ * continuously under its own small velocity and bounces off the section's
+ * edges instead of orbiting a fixed rest point. The cursor still gently
+ * pushes nearby clocks away, same as the hero's particles leaning off the
+ * pointer. Physics run in refs and are applied via direct DOM transforms
+ * in a single requestAnimationFrame loop, so cursor movement never
+ * triggers a React re-render of the section.
  */
-export default function ClockField({ pointerRef, count = 48 }: ClockFieldProps) {
+export default function ClockField({
+  pointerRef,
+  count = 48,
+  colorClassName = 'text-teal-deep',
+  maxOpacity = 0.62,
+  seed = 42,
+}: ClockFieldProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const iconRefs = useRef<(HTMLSpanElement | null)[]>([]);
-  // Per-icon simulated state: position offset from rest, and velocity.
+  // Per-icon simulated state: offset from the icon's anchor point, and velocity.
   const state = useRef<{ x: number; y: number; vx: number; vy: number }[]>([]);
-  const seeds = useMemo(() => seedField(count), [count]);
+  const seeds = useMemo(() => seedField(count, maxOpacity, seed), [count, maxOpacity, seed]);
 
   useEffect(() => {
-    state.current = seeds.map(() => ({ x: 0, y: 0, vx: 0, vy: 0 }));
+    state.current = seeds.map((s) => ({ x: 0, y: 0, vx: s.vx, vy: s.vy }));
   }, [seeds]);
 
   useEffect(() => {
@@ -101,64 +94,61 @@ export default function ClockField({ pointerRef, count = 48 }: ClockFieldProps) 
     const start = performance.now();
 
     function tick(now: number) {
-      const container = containerRef.current;
-      if (container) {
-        const rect = container.getBoundingClientRect();
-        const pointer = pointerRef.current;
-        const t = (now - start) / 1000;
+      try {
+        const container = containerRef.current;
+        if (container) {
+          const rect = container.getBoundingClientRect();
+          const pointer = pointerRef.current;
+          const t = (now - start) / 1000;
 
-        seeds.forEach((seed, index) => {
-          const s = state.current[index] ?? { x: 0, y: 0, vx: 0, vy: 0 };
+          seeds.forEach((seedItem, index) => {
+            const s = state.current[index] ?? { x: 0, y: 0, vx: seedItem.vx, vy: seedItem.vy };
 
-          // Idle floating rest position — a slow Lissajous-style bob, so
-          // every icon quietly drifts on its own loop even with no cursor
-          // nearby (the "zero gravity" feel).
-          const driftX = Math.sin(t * seed.driftSpeedX + seed.driftPhaseX) * seed.driftAmpX;
-          const driftY = Math.cos(t * seed.driftSpeedY + seed.driftPhaseY) * seed.driftAmpY;
+            // Free-roaming drift under its own velocity — no idle rest
+            // point to spring back to, just like the hero's particles.
+            s.x += s.vx;
+            s.y += s.vy;
 
-          // Cursor avoidance: an outward force whose strength ramps up
-          // sharply the closer the cursor gets, scaled by the icon's mass
-          // so lighter icons flee faster than heavier ones. Pointer is
-          // tracked in raw viewport coordinates (see Values.tsx), so the
-          // icon's position needs to be expressed in the same space —
-          // adding rect.left/rect.top, re-measured fresh every frame, so
-          // this stays correct through scrolling and resizing too.
-          const iconX = rect.left + (seed.leftPct / 100) * rect.width + s.x;
-          const iconY = rect.top + (seed.topPct / 100) * rect.height + s.y;
+            const anchorX = (seedItem.leftPct / 100) * rect.width;
+            const anchorY = (seedItem.topPct / 100) * rect.height;
+            const half = seedItem.size / 2;
+            const minX = -anchorX + half;
+            const maxX = rect.width - anchorX - half;
+            const minY = -anchorY + half;
+            const maxY = rect.height - anchorY - half;
 
-          let ax = 0;
-          let ay = 0;
+            if (s.x <= minX || s.x >= maxX) s.vx *= -1;
+            if (s.y <= minY || s.y >= maxY) s.vy *= -1;
+            s.x = Math.min(Math.max(s.x, minX), maxX);
+            s.y = Math.min(Math.max(s.y, minY), maxY);
 
-          if (pointer.active) {
-            const dx = iconX - pointer.x;
-            const dy = iconY - pointer.y;
-            const dist = Math.hypot(dx, dy);
-            if (dist < REPEL_RADIUS && dist > 0.01) {
-              const falloff = 1 - dist / REPEL_RADIUS;
-              const force = (falloff * falloff * PUSH_FORCE) / seed.mass;
-              ax += (dx / dist) * force;
-              ay += (dy / dist) * force;
+            // Cursor push: nudges the icon directly (no spring/damping),
+            // same as the hero's particle-to-mouse interaction.
+            const iconX = rect.left + anchorX + s.x;
+            const iconY = rect.top + anchorY + s.y;
+            if (pointer.active) {
+              const dx = iconX - pointer.x;
+              const dy = iconY - pointer.y;
+              const dist = Math.hypot(dx, dy);
+              if (dist < MOUSE_DISTANCE && dist > 0.01) {
+                const pull = ((MOUSE_DISTANCE - dist) / MOUSE_DISTANCE) * PUSH_STRENGTH;
+                s.x += (dx / dist) * pull;
+                s.y += (dy / dist) * pull;
+              }
             }
-          }
 
-          // Spring back toward the idle drift position, plus damping —
-          // this is what gives the motion inertia and weight instead of
-          // a linear snap-back.
-          ax += (driftX - s.x) * SPRING_K;
-          ay += (driftY - s.y) * SPRING_K;
+            state.current[index] = s;
 
-          s.vx = (s.vx + ax) * DAMPING;
-          s.vy = (s.vy + ay) * DAMPING;
-          s.x += s.vx;
-          s.y += s.vy;
-          state.current[index] = s;
-
-          const el = iconRefs.current[index];
-          if (el) {
-            const spin = seed.rotate + Math.sin(t * 0.2 + seed.driftPhaseX) * seed.spinSpeed;
-            el.style.transform = `translate3d(${s.x.toFixed(1)}px, ${s.y.toFixed(1)}px, 0) rotate(${spin.toFixed(1)}deg)`;
-          }
-        });
+            const el = iconRefs.current[index];
+            if (el) {
+              const spin = seedItem.rotate + Math.sin(t * 0.15 + seedItem.spinPhase) * seedItem.spinSpeed;
+              el.style.transform = `translate3d(${s.x.toFixed(1)}px, ${s.y.toFixed(1)}px, 0) rotate(${spin.toFixed(1)}deg)`;
+            }
+          });
+        }
+      } catch {
+        // Skip this frame's update; the loop below still reschedules so
+        // animation resumes cleanly on the next frame.
       }
 
       frameId = requestAnimationFrame(tick);
@@ -170,21 +160,21 @@ export default function ClockField({ pointerRef, count = 48 }: ClockFieldProps) 
 
   return (
     <div ref={containerRef} aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-      {seeds.map((seed, index) => (
+      {seeds.map((seedItem, index) => (
         <span
-          key={seed.id}
+          key={seedItem.id}
           ref={(el) => {
             iconRefs.current[index] = el;
           }}
-          className="absolute text-teal-deep will-change-transform"
+          className={`absolute will-change-transform ${colorClassName}`}
           style={{
-            left: `${seed.leftPct}%`,
-            top: `${seed.topPct}%`,
-            fontSize: seed.size,
-            opacity: seed.opacity,
+            left: `${seedItem.leftPct}%`,
+            top: `${seedItem.topPct}%`,
+            fontSize: seedItem.size,
+            opacity: seedItem.opacity,
           }}
         >
-          <MaterialIcon name="schedule" filled className="block" style={{ fontSize: seed.size }} />
+          <MaterialIcon name="schedule" filled className="block" style={{ fontSize: seedItem.size }} />
         </span>
       ))}
     </div>

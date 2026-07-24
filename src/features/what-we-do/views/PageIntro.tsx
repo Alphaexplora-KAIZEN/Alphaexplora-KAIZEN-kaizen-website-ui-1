@@ -202,7 +202,7 @@ export default function PageIntro() {
   return (
     <Section
       id={HERO_ID}
-      className="scroll-mt-[var(--wwd-sticky-offset)] relative overflow-hidden bg-kaizen-grid flex flex-col justify-center min-h-[calc(100dvh-5rem)] pt-24 pb-10 md:pt-16 md:pb-12"
+      className="scroll-mt-[var(--wwd-sticky-offset)] relative overflow-hidden flex flex-col justify-center min-h-[calc(100dvh-5rem)] pt-24 pb-10 md:pt-16 md:pb-12"
     >
       <div className="absolute inset-0 bg-kaizen-mesh-wwd-hero pointer-events-none" />
 
@@ -235,7 +235,7 @@ export default function PageIntro() {
 
           <motion.div variants={logoVariants} className="relative">
             <motion.img
-              src="/assets/logo_with_name_white_Blue_Green.png"
+              src="/assets/logo_with_name_white_Green.png"
               alt="Kaizen"
               className="w-full max-w-lg sm:max-w-2xl md:max-w-3xl h-auto cursor-pointer"
               whileHover={{

@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { fadeUp, fadeUpLarge } from '../../../shared/utils/constants';
 import MaterialIcon from '../../../shared/components/MaterialIcon';
+import ElectricBorder from '../../../shared/components/ElectricBorder';
 import type { AboutUsData } from '../../../shared/models/types';
 import heroBg from '../../../assets/property-management/Family_in_couch_2.png';
 
@@ -10,8 +11,8 @@ interface HeroProps {
 
 /** Small brand badges shown under the copy — static, not page-data driven. */
 const badges = [
-  { icon: 'verified', label: 'Professional Grade' },
-  { icon: 'bolt', label: 'Efficiency Driven' },
+  { icon: 'verified', label: 'Professional Grade', effect: 'shine' as const },
+  { icon: 'bolt', label: 'Efficiency Driven', effect: 'lightning' as const },
 ];
 
 /**
@@ -38,6 +39,31 @@ export default function Hero({ data }: HeroProps) {
 
   return (
     <section className="relative min-h-[calc(100vh-5rem)] flex items-center overflow-hidden bg-navy-deep">
+      {/* Scoped styles for the "Efficiency Driven" hover effect. The badge
+          is wrapped in <ElectricBorder>, whose canvas keeps tracing its
+          crackling border continuously in the background (cheap for a
+          single small badge), but its glow layers stay invisible until
+          hover — so the reveal still reads as "hover turns this on",
+          just with the ElectricBorder look instead of the old
+          conic-gradient sweep. */}
+      <style>{`
+        .kz-electric-badge .eb-canvas-container,
+        .kz-electric-badge .eb-layers {
+          opacity: 0;
+          transition: opacity 0.4s ease-out;
+        }
+        .kz-electric-badge:hover .eb-canvas-container,
+        .kz-electric-badge:hover .eb-layers {
+          opacity: 1;
+        }
+        .kz-electric-badge:hover .kz-electric-icon {
+          filter: drop-shadow(0 0 6px #2fcda8);
+        }
+        .kz-electric-icon {
+          transition: filter 0.3s ease-out;
+        }
+      `}</style>
+
       <img
         src={heroBg}
         alt="Family relaxing together at home, reflecting the peace of mind Kaizen provides"
@@ -65,7 +91,7 @@ export default function Hero({ data }: HeroProps) {
             className="mb-8"
           >
             <img
-              src="/assets/logo_with_name_white_Blue_Green.png"
+              src="/assets/logo_with_name_white_Green.png"
               alt={headline}
               className="w-full max-w-md sm:max-w-xl md:max-w-2xl h-auto"
             />
@@ -88,15 +114,40 @@ export default function Hero({ data }: HeroProps) {
             animate="visible"
             className="flex flex-wrap gap-4 mb-14"
           >
-            {badges.map((badge) => (
-              <span
-                key={badge.label}
-                className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full border border-white/25 bg-white/5 backdrop-blur-sm text-on-background font-label-bold text-[14px] uppercase tracking-wide"
-              >
-                <MaterialIcon name={badge.icon} filled className={`text-[20px] ${badge.icon === 'verified' ? 'text-blue' : 'text-teal'}`} />
-                {badge.label}
-              </span>
-            ))}
+            {badges.map((badge) => {
+              const isLightning = badge.effect === 'lightning';
+
+              if (isLightning) {
+                return (
+                  <ElectricBorder
+                    key={badge.label}
+                    color="#2FCDA8"
+                    speed={1.5}
+                    chaos={0.08}
+                    borderRadius={999}
+                    className="kz-electric-badge inline-flex items-center gap-2.5 px-6 py-3 border border-white/25 bg-white/5 backdrop-blur-sm text-on-background font-label-bold text-[14px] uppercase tracking-wide"
+                  >
+                    <MaterialIcon name={badge.icon} filled className="kz-electric-icon relative text-[20px] text-teal" />
+                    <span className="relative">{badge.label}</span>
+                  </ElectricBorder>
+                );
+              }
+
+              return (
+                <span
+                  key={badge.label}
+                  className="group/badge relative inline-flex items-center gap-2.5 px-6 py-3 rounded-full border border-white/25 bg-white/5 backdrop-blur-sm text-on-background font-label-bold text-[14px] uppercase tracking-wide overflow-hidden"
+                >
+                  <span
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-0 -translate-x-full skew-x-[20deg] bg-gradient-to-r from-transparent via-blue/60 to-transparent transition-transform duration-1000 ease-out group-hover/badge:translate-x-full"
+                  />
+
+                  <MaterialIcon name={badge.icon} filled className="relative text-[20px] text-blue" />
+                  <span className="relative">{badge.label}</span>
+                </span>
+              );
+            })}
           </motion.div>
         </motion.div>
 

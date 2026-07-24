@@ -3,7 +3,7 @@ import { motion, useInView } from 'framer-motion';
 import { fadeUp, staggerContainer } from '../../../shared/utils/constants';
 import Section from '../../../shared/components/Section';
 import MaterialIcon from '../../../shared/components/MaterialIcon';
-import IconField, { type PointerState } from './IconField';
+import ClockField, { type PointerState } from './ClockField';
 import type { CoreValue } from '../../../shared/models/types';
 
 interface ValuesProps {
@@ -181,10 +181,9 @@ export default function Values({ coreValues }: ValuesProps) {
             THIS section permanently, regardless of what Framer Motion is
             doing to the section's transform during its scroll reveal. */}
         <div className="absolute inset-0 -z-10">
-          <IconField
+          <ClockField
             pointerRef={pointerRef}
             count={70}
-            icon="schedule"
             colorClassName="text-white"
             maxOpacity={0.22}
             seed={42}
@@ -261,22 +260,27 @@ export default function Values({ coreValues }: ValuesProps) {
                     transition={LIT_TRANSITION}
                     className="relative flex h-full md:flex-col items-start md:items-center gap-5 md:gap-0 md:text-center rounded-2xl border bg-surface-container p-7 md:p-9"
                   >
-                    <motion.div
-                      animate={{
-                        scale: isLit ? 1.08 : 1,
-                        borderColor: isLit ? 'rgba(47,205,168,1)' : 'rgba(47,205,168,0.35)',
-                        boxShadow: isLit
-                          ? '0 0 0 1px rgba(47,205,168,0.4), 0 0 24px 4px rgba(47,205,168,0.45)'
-                          : '0 0 0 0 rgba(47,205,168,0)',
-                      }}
-                      transition={LIT_TRANSITION}
-                      className="relative z-10 flex h-20 w-20 shrink-0 items-center justify-center rounded-full border-2 bg-navy-deep md:mb-6 font-mono text-3xl text-teal"
+                    <div
+                      className="relative z-10 md:mb-6 animate-float"
+                      style={{ animationDuration: `${6 + index * 1.1}s`, animationDelay: `${index * 0.5}s` }}
                     >
-                      {VALUE_LETTER[value.id] ?? '•'}
-                      <span className="absolute -bottom-1 -right-1 flex h-7 w-7 items-center justify-center rounded-full bg-teal-soft text-teal ring-4 ring-surface-container">
-                        <MaterialIcon name={VALUE_ICON[value.id] ?? 'star'} filled className="text-[15px]" />
-                      </span>
-                    </motion.div>
+                      <motion.div
+                        animate={{
+                          scale: isLit ? 1.08 : 1,
+                          borderColor: isLit ? 'rgba(47,205,168,1)' : 'rgba(47,205,168,0.35)',
+                          boxShadow: isLit
+                            ? '0 0 0 1px rgba(47,205,168,0.4), 0 12px 28px -6px rgba(2,7,15,0.55), 0 0 24px 4px rgba(47,205,168,0.45)'
+                            : '0 0 0 0 rgba(47,205,168,0), 0 12px 28px -6px rgba(2,7,15,0.55)',
+                        }}
+                        transition={LIT_TRANSITION}
+                        className="relative flex h-20 w-20 shrink-0 items-center justify-center rounded-full border-2 bg-navy-deep font-mono text-3xl text-teal"
+                      >
+                        {VALUE_LETTER[value.id] ?? '•'}
+                        <span className="absolute -bottom-1 -right-1 flex h-7 w-7 items-center justify-center rounded-full bg-teal-soft text-teal ring-4 ring-surface-container">
+                          <MaterialIcon name={VALUE_ICON[value.id] ?? 'star'} filled className="text-[15px]" />
+                        </span>
+                      </motion.div>
+                    </div>
                     <div className="pt-1 md:pt-0">
                       <p className="font-label-bold text-xl text-on-surface mb-2">{value.title}</p>
                       <p className="font-body-md text-body-md md:text-[17px] text-on-surface-variant md:max-w-[230px] md:mx-auto text-justify">

@@ -12,7 +12,7 @@ function isInternalHref(href: string) {
 
 function FooterLink({ href, label }: { href: string; label: string }) {
   const className =
-    'link-underline font-label-sm text-label-sm text-on-primary/80 hover:text-blue transition-colors';
+    'link-underline font-label-sm text-label-sm text-on-primary/80 hover:text-teal transition-colors';
   if (isInternalHref(href)) {
     return (
       <Link to={href} className={className}>
@@ -52,7 +52,7 @@ export default function Footer({ chrome }: FooterProps) {
           <div className="space-y-3">
             <Link to="/" className="inline-flex items-center gap-2.5 group">
               <img
-                src="/assets/logo_with_name_white_Blue_Green.png"
+                src="/assets/logo_with_name_white_Green.png"
                 alt={chrome.brand.shortName}
                 className="h-9 w-auto object-contain transition-transform duration-300 group-hover:scale-[1.04]"
               />
@@ -62,14 +62,14 @@ export default function Footer({ chrome }: FooterProps) {
               <a
                 href={contactInfo.emailHref}
                 aria-label="Email us"
-                className="text-on-primary/80 hover:text-blue hover:-translate-y-0.5 transition-all duration-200"
+                className="text-on-primary/80 hover:text-teal hover:-translate-y-0.5 transition-all duration-200"
               >
                 <MaterialIcon name="mail" />
               </a>
               <a
                 href={contactInfo.propertyManagementPhoneHref}
                 aria-label="Call us"
-                className="text-on-primary/80 hover:text-blue hover:-translate-y-0.5 transition-all duration-200"
+                className="text-on-primary/80 hover:text-teal hover:-translate-y-0.5 transition-all duration-200"
               >
                 <MaterialIcon name="call" />
               </a>
@@ -78,7 +78,7 @@ export default function Footer({ chrome }: FooterProps) {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Follow us on Facebook"
-                className="text-on-primary/80 hover:text-blue hover:-translate-y-0.5 transition-all duration-200"
+                className="text-on-primary/80 hover:text-teal hover:-translate-y-0.5 transition-all duration-200"
               >
                 <FacebookIcon />
               </a>
@@ -100,11 +100,24 @@ export default function Footer({ chrome }: FooterProps) {
         </div>
 
         <div className="pt-4 flex flex-col md:flex-row items-center md:items-end justify-between gap-3 text-center md:text-left">
-          <p className="font-body-md text-body-md text-on-primary/80">{chrome.copyright}</p>
+          <div className="space-y-1">
+            <p className="font-body-md text-body-md text-on-primary/80">{chrome.copyright}</p>
+            <p className="font-body-md text-body-md text-on-primary/60">
+              Powered by{' '}
+              <a
+                href="https://www.alphaexplora.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="link-underline text-on-primary/80 hover:text-teal transition-colors"
+              >
+                Alphaexplora Information Technology Services
+              </a>
+            </p>
+          </div>
           <button
             type="button"
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="group inline-flex items-center gap-1.5 font-label-bold text-label-bold text-on-primary/70 hover:text-blue transition-colors focus-ring rounded"
+            className="group inline-flex items-center gap-1.5 font-label-bold text-label-bold text-on-primary/70 hover:text-teal transition-colors focus-ring rounded"
           >
             Back to top
             <MaterialIcon

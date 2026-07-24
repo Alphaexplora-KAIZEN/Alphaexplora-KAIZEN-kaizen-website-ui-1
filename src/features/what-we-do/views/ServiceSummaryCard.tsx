@@ -93,7 +93,7 @@ export default function ServiceSummaryCard({
             centered within it and scaled up to hold its own beside a
             much taller image */}
         <div
-          className="relative flex flex-col justify-center overflow-hidden px-6 py-14 sm:px-10 md:px-16 lg:h-full lg:py-16 xl:px-20 bg-kaizen-grid"
+          className="relative flex flex-col justify-center overflow-hidden px-6 py-14 sm:px-10 md:px-16 lg:h-full lg:py-16 xl:px-20"
           style={reverse ? { direction: 'ltr' } : undefined}
         >
           <div className="pointer-events-none absolute inset-0 bg-kaizen-mesh" />

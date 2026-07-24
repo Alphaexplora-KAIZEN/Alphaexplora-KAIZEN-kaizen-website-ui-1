@@ -41,7 +41,7 @@ export default function Navbar({ brand, links }: NavbarProps) {
       >
         <Link to="/" className="group flex items-center gap-3.5 focus-ring rounded-lg pl-4 sm:pl-6">
           <img
-            src="/assets/logo_with_name_white_Blue_Green.png"
+            src="/assets/logo_with_name_white_Green.png"
             alt={brand.shortName}
             className="h-16 w-auto object-contain transition-transform duration-300 group-hover:scale-[1.04]"
           />

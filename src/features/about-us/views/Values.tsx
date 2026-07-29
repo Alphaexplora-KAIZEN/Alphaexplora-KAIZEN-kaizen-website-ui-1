@@ -283,7 +283,7 @@ export default function Values({ coreValues }: ValuesProps) {
                     </div>
                     <div className="pt-1 md:pt-0">
                       <p className="font-label-bold text-xl text-on-surface mb-2">{value.title}</p>
-                      <p className="font-body-md text-body-md md:text-[17px] text-on-surface-variant md:max-w-[230px] md:mx-auto text-justify">
+                      <p className="font-body-md text-body-md md:text-[17px] text-on-surface-variant md:max-w-[230px] md:mx-auto text-center">
                         {value.description}
                       </p>
                     </div>

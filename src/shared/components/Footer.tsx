@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import type { SiteChrome } from '../models/types';
 import MaterialIcon from './MaterialIcon';
@@ -32,11 +33,79 @@ function FooterLink({ href, label }: { href: string; label: string }) {
   );
 }
 
-function FacebookIcon() {
+function FacebookIcon({ className = '' }: { className?: string }) {
   return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" className={className}>
       <path d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06c0 5 3.66 9.15 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.89h2.78l-.45 2.91h-2.33V22c4.78-.79 8.44-4.94 8.44-9.94Z" />
     </svg>
+  );
+}
+
+/**
+ * Splits a contact label like "0919 677 8350 (Property Management)" into
+ * the primary value and its parenthetical description, so each can get
+ * its own visual weight instead of running together as one plain string.
+ */
+function splitContactLabel(label: string): { primary: string; note?: string } {
+  const match = label.match(/^(.*?)\s*\((.+)\)\s*$/);
+  if (match) {
+    return { primary: match[1].trim(), note: match[2].trim() };
+  }
+  return { primary: label };
+}
+
+function ContactRow({ href, label }: { href: string; label: string }) {
+  const { primary, note } = splitContactLabel(label);
+  const isPhone = href.startsWith('tel:');
+  const isEmail = href.startsWith('mailto:');
+  const isFacebook = href.includes('facebook.com');
+  const external = href.startsWith('http');
+
+  return (
+    <a
+      href={href}
+      target={external ? '_blank' : undefined}
+      rel={external ? 'noopener noreferrer' : undefined}
+      className="group flex items-center gap-2 rounded-lg -mx-2 px-2 py-1 transition-colors hover:bg-on-primary/5 focus-ring"
+    >
+      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-teal/10 text-teal transition-colors group-hover:bg-teal group-hover:text-navy-deep">
+        {isPhone && <MaterialIcon name="call" className="text-sm" />}
+        {isEmail && <MaterialIcon name="mail" className="text-sm" />}
+        {isFacebook && <FacebookIcon className="h-4 w-4" />}
+      </span>
+      <span className="min-w-0">
+        <span className="block font-label-sm text-[11px] leading-snug font-semibold text-on-primary truncate group-hover:text-teal transition-colors">
+          {primary}
+        </span>
+        {note && (
+          <span className="block font-body-sm text-[10px] leading-snug text-on-primary/55">{note}</span>
+        )}
+      </span>
+    </a>
+  );
+}
+
+function BrandIconLink({
+  href,
+  label,
+  external,
+  children,
+}: {
+  href: string;
+  label: string;
+  external?: boolean;
+  children: ReactNode;
+}) {
+  return (
+    <a
+      href={href}
+      target={external ? '_blank' : undefined}
+      rel={external ? 'noopener noreferrer' : undefined}
+      aria-label={label}
+      className="flex h-10 w-10 items-center justify-center rounded-full bg-on-primary/5 text-on-primary/80 transition-all duration-200 hover:bg-teal hover:text-navy-deep hover:-translate-y-0.5 focus-ring"
+    >
+      {children}
+    </a>
   );
 }
 
@@ -44,12 +113,12 @@ export default function Footer({ chrome }: FooterProps) {
   const { contactInfo } = chrome;
 
   return (
-    <footer className="relative w-full bg-navy-deep bg-grain py-8 md:py-10 overflow-hidden">
+    <footer className="relative w-full bg-navy-deep bg-grain py-10 md:py-10 overflow-hidden">
       <div className="pointer-events-none absolute -top-24 -right-24 h-64 w-64 rounded-full bg-teal/10 blur-3xl" />
       <div className="pointer-events-none absolute -bottom-20 -left-16 h-56 w-56 rounded-full bg-teal/10 blur-3xl" />
       <div className="relative max-w-container-max-width mx-auto px-6">
-        <div className="grid grid-cols-1 md:grid-cols-[1.3fr_1fr_1fr_1fr] gap-x-grid-gutter gap-y-6 pb-6 md:pb-8 border-b border-on-primary/15">
-          <div className="space-y-3">
+        <div className="grid grid-cols-2 gap-x-5 gap-y-9 sm:gap-x-grid-gutter md:grid-cols-[1.3fr_1fr_1fr_1fr] md:gap-y-6 pb-8 md:pb-8 border-b border-on-primary/15">
+          <div className="col-span-2 md:col-span-1 flex flex-col items-center text-center md:items-start md:text-left space-y-4 md:space-y-3">
             <Link to="/" className="inline-flex items-center gap-2.5 group">
               <img
                 src="/assets/logo_with_name_white_Green.png"
@@ -58,48 +127,47 @@ export default function Footer({ chrome }: FooterProps) {
               />
             </Link>
             <p className="font-body-md text-body-md text-on-primary/80 max-w-xs">{chrome.footerBlurb}</p>
-            <div className="flex gap-4 pt-1">
-              <a
-                href={contactInfo.emailHref}
-                aria-label="Email us"
-                className="text-on-primary/80 hover:text-teal hover:-translate-y-0.5 transition-all duration-200"
-              >
+            <div className="flex gap-3 pt-1">
+              <BrandIconLink href={contactInfo.emailHref} label="Email us">
                 <MaterialIcon name="mail" />
-              </a>
-              <a
-                href={contactInfo.propertyManagementPhoneHref}
-                aria-label="Call us"
-                className="text-on-primary/80 hover:text-teal hover:-translate-y-0.5 transition-all duration-200"
-              >
+              </BrandIconLink>
+              <BrandIconLink href={contactInfo.propertyManagementPhoneHref} label="Call us">
                 <MaterialIcon name="call" />
-              </a>
-              <a
-                href={contactInfo.facebookUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Follow us on Facebook"
-                className="text-on-primary/80 hover:text-teal hover:-translate-y-0.5 transition-all duration-200"
-              >
+              </BrandIconLink>
+              <BrandIconLink href={contactInfo.facebookUrl} label="Follow us on Facebook" external>
                 <FacebookIcon />
-              </a>
+              </BrandIconLink>
             </div>
           </div>
 
           {chrome.footerGroups.map((group) => (
-            <div key={group.id} className="space-y-2.5">
+            <div
+              key={group.id}
+              className={`space-y-3 md:space-y-2.5 ${group.id === 'contact' ? 'col-span-2 md:col-span-1' : ''}`}
+            >
               <h4 className="font-label-bold text-label-bold text-blue uppercase tracking-wider">{group.title}</h4>
-              <ul className="space-y-1.5">
-                {group.links.map((link) => (
-                  <li key={link.id}>
-                    <FooterLink href={link.href} label={link.label} />
-                  </li>
-                ))}
-              </ul>
+              {group.id === 'contact' ? (
+                <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 gap-x-3 gap-y-0.5">
+                  {group.links.map((link) => (
+                    <li key={link.id}>
+                      <ContactRow href={link.href} label={link.label} />
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <ul className="space-y-2 md:space-y-1.5">
+                  {group.links.map((link) => (
+                    <li key={link.id}>
+                      <FooterLink href={link.href} label={link.label} />
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
           ))}
         </div>
 
-        <div className="pt-4 flex flex-col md:flex-row items-center md:items-end justify-between gap-3 text-center md:text-left">
+        <div className="pt-6 md:pt-4 flex flex-col md:flex-row items-center md:items-end justify-between gap-4 md:gap-3 text-center md:text-left">
           <div className="space-y-1">
             <p className="font-body-md text-body-md text-on-primary/80">{chrome.copyright}</p>
             <p className="font-body-md text-body-md text-on-primary/60">

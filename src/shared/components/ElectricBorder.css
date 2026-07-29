@@ -20,6 +20,7 @@
 }
 
 .eb-content {
+  display: flex;
   position: relative;
   border-radius: inherit;
   z-index: 1;

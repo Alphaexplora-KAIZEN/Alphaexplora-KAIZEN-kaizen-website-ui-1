@@ -48,8 +48,13 @@ export default function Hero({ data }: HeroProps) {
   return (
     <section className="relative min-h-[calc(100vh-5rem)] flex items-center pt-section-gap-mobile md:pt-section-gap-desktop pb-section-gap-mobile md:pb-section-gap-desktop overflow-hidden bg-kaizen-grid">
       <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-r from-background via-background/85 to-background/30 z-10" />
-        <div className="absolute inset-0 bg-kaizen-mesh z-10" />
+        <div className="absolute inset-0 bg-gradient-to-r from-background via-background/85 to-background/30 z-10 md:block hidden" />
+        {/* Mobile: the desktop gradient above darkens left-to-right, which
+            leaves too much of the photo exposed since the copy spans
+            nearly the full width on a narrow screen. Cover the whole
+            image with a flat dark shade instead. */}
+        <div className="absolute inset-0 bg-background/70 md:hidden z-10" />
+        <div className="absolute inset-0 bg-kaizen-mesh bg-kaizen-mesh-home-hero z-10" />
         <AnimatePresence mode="sync">
           <motion.img
             key={slides[activeSlide].id}
@@ -89,7 +94,7 @@ export default function Hero({ data }: HeroProps) {
             initial="hidden"
             animate="visible"
             custom={0.3}
-            className="font-body-lg text-base sm:text-lg text-on-surface-variant mb-12 max-w-2xl text-justify"
+            className="font-body-lg text-base sm:text-lg text-on-surface-variant mb-12 max-w-2xl text-left md:text-justify"
           >
             {data.subheadline}
           </motion.p>

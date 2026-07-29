@@ -76,7 +76,7 @@ export default function Benefits({ data }: BenefitsProps) {
                           animate={{ opacity: 1, height: 'auto' }}
                           exit={{ opacity: 0, height: 0 }}
                           transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                          className="font-body-md text-body-md text-primary-fixed-dim text-justify overflow-hidden"
+                          className="font-body-md text-body-md text-primary-fixed-dim text-left md:text-justify overflow-hidden"
                         >
                           {benefit.description}
                         </motion.p>

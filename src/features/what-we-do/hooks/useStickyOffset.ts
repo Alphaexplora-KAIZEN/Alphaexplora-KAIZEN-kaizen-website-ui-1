@@ -1,6 +1,7 @@
 import { useEffect, type RefObject } from 'react';
 
-const CSS_VAR = '--wwd-sticky-offset';
+const OFFSET_VAR = '--wwd-sticky-offset';
+const NAVBAR_VAR = '--wwd-navbar-offset';
 
 /**
  * The page's snap points previously used a guessed, fixed `scroll-mt-36`
@@ -17,17 +18,27 @@ const CSS_VAR = '--wwd-sticky-offset';
  * set `scroll-margin-top: var(--wwd-sticky-offset)` so the snap position
  * is always exactly the height of what's actually covering the top of the
  * viewport — no gap, nothing clipped.
+ *
+ * On mobile the navbar also fades out entirely while scrolling down
+ * (see Navbar's `data-hidden` attribute) and only a small pinned burger
+ * button remains. When that happens this treats the navbar's contribution
+ * to both offsets as 0, and publishes that separately as
+ * `--wwd-navbar-offset` so QuickNav can stick flush to the top of the
+ * viewport instead of leaving a blank gap where the faded navbar used to be.
  */
 export function useStickyOffset(quickNavRef: RefObject<HTMLElement | null>) {
   useEffect(() => {
     const quickNavEl = quickNavRef.current;
     if (!quickNavEl) return undefined;
 
+    const navbarEl = document.querySelector('[data-site-navbar]');
+
     function measure() {
-      const navbarEl = document.querySelector('[data-site-navbar]');
-      const navbarHeight = navbarEl instanceof HTMLElement ? navbarEl.offsetHeight : 0;
+      const isNavbarHidden = navbarEl instanceof HTMLElement && navbarEl.getAttribute('data-hidden') === 'true';
+      const navbarHeight = navbarEl instanceof HTMLElement && !isNavbarHidden ? navbarEl.offsetHeight : 0;
       const quickNavHeight = quickNavEl instanceof HTMLElement ? quickNavEl.offsetHeight : 0;
-      document.documentElement.style.setProperty(CSS_VAR, `${navbarHeight + quickNavHeight}px`);
+      document.documentElement.style.setProperty(NAVBAR_VAR, `${navbarHeight}px`);
+      document.documentElement.style.setProperty(OFFSET_VAR, `${navbarHeight + quickNavHeight}px`);
     }
 
     measure();
@@ -39,12 +50,22 @@ export function useStickyOffset(quickNavRef: RefObject<HTMLElement | null>) {
     // polling.
     const observer = new ResizeObserver(measure);
     observer.observe(quickNavEl);
-    const navbarEl = document.querySelector('[data-site-navbar]');
     if (navbarEl instanceof HTMLElement) observer.observe(navbarEl);
+
+    // The navbar fading out doesn't change its own dimensions (opacity
+    // only), so ResizeObserver won't fire for that — watch its
+    // `data-hidden` attribute directly instead.
+    let attrObserver: MutationObserver | undefined;
+    if (navbarEl instanceof HTMLElement) {
+      attrObserver = new MutationObserver(measure);
+      attrObserver.observe(navbarEl, { attributes: true, attributeFilter: ['data-hidden'] });
+    }
 
     return () => {
       observer.disconnect();
-      document.documentElement.style.removeProperty(CSS_VAR);
+      attrObserver?.disconnect();
+      document.documentElement.style.removeProperty(OFFSET_VAR);
+      document.documentElement.style.removeProperty(NAVBAR_VAR);
     };
   }, [quickNavRef]);
 }

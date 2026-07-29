@@ -111,7 +111,7 @@ export default function ServiceSummaryCard({
               {title}
             </h2>
 
-            <p className="font-body-lg text-body-lg text-on-surface-variant mb-8 max-w-lg text-justify">{description}</p>
+            <p className="font-body-lg text-body-lg text-on-surface-variant mb-8 max-w-lg text-left md:text-justify">{description}</p>
 
             <ul className="space-y-0 mb-8 border-t border-outline-variant max-w-lg">
               {highlights.map((item) => (

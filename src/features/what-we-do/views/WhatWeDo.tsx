@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import pmProcessMarketImg from '../../../assets/property-management/process-market.jpg';
 import PageLayout from '../../../shared/components/PageLayout';
 import AsyncState from '../../../shared/components/AsyncState';
 import BookingModal from '../../../shared/components/BookingModal';
 import { useWhatWeDoViewModel } from '../viewModels/useWhatWeDoViewModel';
+import { useNotebookVisibility } from '../hooks/useNotebookVisibility';
 import PageIntro from './PageIntro';
 import QuickNav from './QuickNav';
 import ServiceNotebook, { type ServiceNotebookEntry } from './ServiceNotebook';
@@ -29,11 +30,44 @@ export default function WhatWeDo() {
   const { data, isLoading, error } = useWhatWeDoViewModel();
   const [bookingOpen, setBookingOpen] = useState(false);
   const location = useLocation();
+  const notebookRef = useRef<HTMLDivElement | null>(null);
+  const notebookVisible = useNotebookVisibility(notebookRef);
 
   const [activeServiceId, setActiveServiceId] = useState<string>(() => {
     const fromHash = location.hash.replace('#', '');
     return SERVICE_IDS.includes(fromHash) ? fromHash : SERVICE_IDS[0];
   });
+
+  // Clicking a QuickNav pill both switches the notebook to that service
+  // and scrolls the notebook into view — useful when the person has
+  // already scrolled further down the page (past the notebook, into
+  // TargetSpaces or TrustCTA) and taps a pill expecting to be taken back
+  // up to see the service they just chose, not just have it change
+  // silently off-screen. `scroll-mt-[var(--wwd-sticky-offset)]` on the
+  // wrapper keeps the notebook from landing underneath the fixed navbar
+  // + sticky QuickNav bar.
+  //
+  // On mobile this jump (the hero's scroll arrow or a QuickNav pill)
+  // should also fade the navbar out and let QuickNav settle flush to the
+  // top of the viewport, the same way scrolling normally hides the bar.
+  // Forcing it hidden up front — rather than letting the scroll-driven
+  // heuristic hide it mid-flight — means the offset is already at its
+  // final (smaller) value before the scroll target is measured, so the
+  // jump lands exactly on the notebook instead of landing short. The
+  // double rAF gives the forced-hidden state a chance to render and the
+  // sticky offset to update before we measure the scroll target.
+  const handleSelectService = (id: string) => {
+    setActiveServiceId(id);
+    window.dispatchEvent(new CustomEvent('kaizen:force-hide-navbar', { detail: { hidden: true } }));
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        document.getElementById('wwd-notebook')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+    window.setTimeout(() => {
+      window.dispatchEvent(new CustomEvent('kaizen:force-hide-navbar', { detail: { hidden: false } }));
+    }, 900);
+  };
 
   useEffect(() => {
     const fromHash = location.hash.replace('#', '');
@@ -102,10 +136,12 @@ export default function WhatWeDo() {
 
           return (
             <>
-              <PageIntro />
-              <QuickNav activeId={activeServiceId} onSelect={setActiveServiceId} />
+              <PageIntro onJumpToPropertyManagement={() => handleSelectService('property-management')} />
+              <QuickNav activeId={activeServiceId} onSelect={handleSelectService} visible={notebookVisible} />
 
-              <ServiceNotebook entries={entries} activeId={activeServiceId} onSelect={setActiveServiceId} />
+              <div id="wwd-notebook" ref={notebookRef} className="scroll-mt-[var(--wwd-sticky-offset)]">
+                <ServiceNotebook entries={entries} activeId={activeServiceId} onSelect={setActiveServiceId} />
+              </div>
 
               <TargetSpaces data={pageData.cleaningServices} />
 

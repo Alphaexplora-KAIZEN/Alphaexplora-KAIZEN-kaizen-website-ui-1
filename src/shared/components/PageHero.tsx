@@ -93,7 +93,7 @@ export default function PageHero({
             initial="hidden"
             animate="visible"
             custom={0.3}
-            className="font-body-lg text-body-lg text-on-surface-variant mb-10 max-w-xl text-justify"
+            className="font-body-lg text-body-lg text-on-surface-variant mb-10 max-w-xl text-left md:text-justify"
           >
             {subheadline}
           </motion.p>

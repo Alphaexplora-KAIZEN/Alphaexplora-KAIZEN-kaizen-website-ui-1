@@ -95,6 +95,15 @@ h1, h2, h3, h4 {
     radial-gradient(520px circle at 50% 100%, rgba(47, 205, 168, 0.035), transparent 68%);
 }
 
+/* On mobile, the homepage hero's copy stacks tall and the blue/teal glow
+   ends up sitting behind the headline text, so it's dropped entirely on
+   small screens. */
+@media (max-width: 767px) {
+  .bg-kaizen-mesh-home-hero {
+    background-image: none;
+  }
+}
+
 /* Faint precision grid — nods to the checklists/process the brand is built on */
 .bg-kaizen-grid {
   background-image:

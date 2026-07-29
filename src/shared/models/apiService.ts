@@ -373,7 +373,7 @@ const HOMEPAGE_DATA: HomepageData = {
   eyebrow: 'We Market. We Manage. We Maintain.',
   headline: 'Peace of Mind Through Comprehensive Care.',
   subheadline:
-    'Kaizen Optima Solutions brings property management, professional cleaning, and aircon care together under one trusted, family-run roof, so you get comprehensive care and consistent quality without juggling multiple vendors.',
+    'One trusted, family-run team for property management, professional cleaning, and aircon care — no more juggling vendors.',
   primaryCta: 'See What We Do',
   primaryHref: '/what-we-do',
   secondaryCta: 'About Us',

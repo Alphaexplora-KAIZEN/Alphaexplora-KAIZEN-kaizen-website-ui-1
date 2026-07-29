@@ -102,7 +102,7 @@ export default function Hero({ data }: HeroProps) {
             initial="hidden"
             animate="visible"
             custom={0.3}
-            className="font-body-lg text-[20px] leading-relaxed text-on-surface-variant mb-10 max-w-2xl text-justify"
+            className="font-body-lg text-[20px] leading-relaxed text-on-surface-variant mb-10 max-w-2xl text-left md:text-justify"
           >
             {subheadline}
           </motion.p>
@@ -125,10 +125,12 @@ export default function Hero({ data }: HeroProps) {
                     speed={1.5}
                     chaos={0.08}
                     borderRadius={999}
-                    className="kz-electric-badge inline-flex items-center gap-2.5 px-6 py-3 border border-white/25 bg-white/5 backdrop-blur-sm text-on-background font-label-bold text-[14px] uppercase tracking-wide"
+                    className="kz-electric-badge inline-flex items-center px-6 py-3 border border-white/25 bg-white/5 backdrop-blur-sm text-on-background font-label-bold text-[14px] uppercase tracking-wide"
                   >
-                    <MaterialIcon name={badge.icon} filled className="kz-electric-icon relative text-[20px] text-teal" />
-                    <span className="relative">{badge.label}</span>
+                    <span className="relative inline-flex items-center gap-2.5">
+                      <MaterialIcon name={badge.icon} filled className="kz-electric-icon relative top-[1px] text-[20px] text-teal" />
+                      <span>{badge.label}</span>
+                    </span>
                   </ElectricBorder>
                 );
               }

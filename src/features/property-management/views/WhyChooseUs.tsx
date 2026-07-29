@@ -70,12 +70,12 @@ export default function WhyChooseUs({ data }: WhyChooseUsProps) {
           <div className="grid grid-cols-1 lg:grid-cols-2">
             <div className="p-8 md:p-16 flex flex-col justify-center">
               <h2 className="font-headline-md text-headline-md text-on-primary mb-6">{data.whyChooseHeading}</h2>
-              <p className="font-body-lg text-body-lg text-primary-fixed-dim mb-10 text-justify">{data.whyChooseBody}</p>
-              <div className="flex flex-wrap gap-10 border-t border-on-primary/15 pt-8">
+              <p className="font-body-lg text-body-lg text-primary-fixed-dim mb-10 text-left md:text-justify">{data.whyChooseBody}</p>
+              <div className="flex flex-wrap gap-x-8 gap-y-6 sm:gap-x-10 border-t border-on-primary/15 pt-8">
                 {data.trustStats.map((stat, index) => (
                   <div
                     key={stat.id}
-                    className={`${index > 0 ? 'pl-10 border-l border-on-primary/15' : ''}`}
+                    className={`${index > 0 ? 'sm:pl-10 sm:border-l sm:border-on-primary/15' : ''}`}
                   >
                     <div className="flex items-center gap-2 mb-2">
                       <MaterialIcon name={STAT_ICONS[stat.id] ?? 'insights'} filled className="text-teal text-xl" />

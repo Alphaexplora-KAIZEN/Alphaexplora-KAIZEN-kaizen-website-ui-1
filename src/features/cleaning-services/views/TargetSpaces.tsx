@@ -35,7 +35,7 @@ export default function TargetSpaces({ data }: TargetSpacesProps) {
         initial="hidden"
         animate={isInView2 ? 'visible' : 'hidden'}
         variants={staggerContainer}
-        className="flex flex-col md:flex-row flex-1 min-h-[520px] md:min-h-0"
+        className="flex flex-col md:flex-row flex-1 md:min-h-[520px]"
         onMouseLeave={() => setActiveId(null)}
       >
         {data.targetSpaces.map((space) => {
@@ -52,7 +52,7 @@ export default function TargetSpaces({ data }: TargetSpacesProps) {
               tabIndex={0}
               role="button"
               aria-expanded={isActive}
-              className="group relative flex-1 overflow-hidden cursor-pointer outline-none"
+              className="group relative flex-1 min-h-[250px] md:min-h-0 overflow-hidden cursor-pointer outline-none"
             >
               <img
                 src={space.image.src}
@@ -68,18 +68,18 @@ export default function TargetSpaces({ data }: TargetSpacesProps) {
                 }`}
               />
 
-              <div className="absolute top-4 left-4 w-12 h-12 rounded-full bg-surface/90 backdrop-blur-sm flex items-center justify-center text-teal shadow-ambient shrink-0">
-                <MaterialIcon name={space.icon} className="text-[24px]" />
+              <div className="absolute top-3 left-3 sm:top-4 sm:left-4 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-surface/90 backdrop-blur-sm flex items-center justify-center text-teal shadow-ambient shrink-0">
+                <MaterialIcon name={space.icon} className="text-[20px] sm:text-[24px]" />
               </div>
 
-              <div className="absolute bottom-6 left-5 right-5">
-                <p className="font-headline-sm text-xl sm:text-2xl text-on-primary leading-snug mb-2">
+              <div className="absolute bottom-4 sm:bottom-6 left-4 right-4 sm:left-5 sm:right-5">
+                <p className="font-headline-sm text-lg sm:text-2xl text-on-primary leading-snug mb-1.5 sm:mb-2">
                   {space.label}
                 </p>
                 <p
-                  className={`font-body-md text-base text-on-primary/90 leading-relaxed transition-all duration-500 ease-out overflow-hidden ${
+                  className={`font-body-md text-sm sm:text-base text-on-primary/90 leading-relaxed transition-all duration-500 ease-out overflow-hidden ${
                     isActive
-                      ? 'opacity-100 translate-y-0 max-h-28 delay-150'
+                      ? 'opacity-100 translate-y-0 max-h-20 sm:max-h-28 delay-150'
                       : 'opacity-0 translate-y-2 max-h-0'
                   }`}
                 >

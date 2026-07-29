@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { AnimatePresence, motion, useReducedMotion, type PanInfo } from 'framer-motion';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import Section from '../../../shared/components/Section';
 import MaterialIcon from '../../../shared/components/MaterialIcon';
 
@@ -33,7 +33,6 @@ interface ServiceNotebookProps {
 // feels like it belongs to the same motion — no mixed easing, no bounce.
 const EASE: [number, number, number, number] = [0.32, 0.72, 0, 1];
 const SWAP_DURATION = 0.6;
-const SWIPE_THRESHOLD = 70;
 
 /**
  * All three services on one screen. The photo box and the copy box
@@ -46,7 +45,7 @@ const SWIPE_THRESHOLD = 70;
  * in a single column. Content inside the copy panel (eyebrow, heading,
  * description, highlights, CTA) fades and lifts in with a light stagger
  * once it settles. Navigation lives entirely in QuickNav above (plus
- * swipe and the arrow keys) rather than duplicated controls here.
+ * the arrow keys) rather than duplicated controls here.
  * `prefers-reduced-motion` shortens all of this to a near-instant fade
  * and turns off the swap animation.
  */
@@ -82,11 +81,6 @@ export default function ServiceNotebook({ entries, activeId, onSelect }: Service
     return () => window.removeEventListener('keydown', handleKeyDown);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentIndex, entries]);
-
-  function handleDragEnd(_: unknown, info: PanInfo) {
-    if (info.offset.x < -SWIPE_THRESHOLD) goTo(currentIndex + 1);
-    else if (info.offset.x > SWIPE_THRESHOLD) goTo(currentIndex - 1);
-  }
 
   const active = entries[currentIndex];
   const swapTransition = { duration: reduceMotion ? 0 : SWAP_DURATION, ease: EASE };
@@ -177,15 +171,7 @@ export default function ServiceNotebook({ entries, activeId, onSelect }: Service
               initial={{ opacity: 0 }}
               animate={{ opacity: 1, transition: { duration: reduceMotion ? 0.15 : 0.5, ease: EASE, delay: reduceMotion ? 0 : 0.1 } }}
               exit={{ opacity: 0, transition: { duration: reduceMotion ? 0.1 : 0.3, ease: EASE } }}
-              style={{ touchAction: 'pan-y' }}
-              drag={reduceMotion ? false : 'x'}
-              dragElastic={0.12}
-              dragConstraints={{ left: 0, right: 0 }}
-              dragTransition={{ bounceStiffness: 400, bounceDamping: 32 }}
-              onDragEnd={handleDragEnd}
-              className={`absolute inset-0 flex flex-col justify-center overflow-hidden px-6 py-14 sm:px-10 md:px-16 lg:py-16 xl:px-20 shadow-2xl shadow-black/20 ${
-                reduceMotion ? '' : 'cursor-grab active:cursor-grabbing'
-              }`}
+              className="absolute inset-0 flex flex-col justify-center overflow-hidden px-6 py-14 sm:px-10 md:px-16 lg:py-16 xl:px-20 shadow-2xl shadow-black/20"
             >
               <div className="pointer-events-none absolute inset-0 bg-kaizen-mesh" />
               <div
@@ -215,7 +201,7 @@ export default function ServiceNotebook({ entries, activeId, onSelect }: Service
 
                 <motion.p
                   variants={contentItemVariants}
-                  className="font-body-lg text-body-lg text-on-surface-variant mb-8 max-w-lg text-justify"
+                  className="font-body-lg text-body-lg text-on-surface-variant mb-8 max-w-lg text-left md:text-justify"
                 >
                   {active.description}
                 </motion.p>
